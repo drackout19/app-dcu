@@ -142,6 +142,31 @@
               </tr>
           </thead>
           <tbody >
+
+           
+            @forelse ($dataManpower as $data)
+                @forelse ($data->dcurecap as $dataDCU) 
+            
+                    <tr>
+                        <td class="text-center">{{ $loop->iteration }}</td>
+                        <td class="text-center">{{ $dataDCU->tanggal }}</td>
+                        <td class="text-center">27501</td>
+                        <td class="text-start">{{ $data->jabatan }}</td>
+                        <td class="text-start">{{ $data->nama_pekerja }}</td>
+                        <td class="text-center fw-bolder">FIT </td>
+                        <td class="text-center fw-bolder">{{ $dataDCU->suhu_badan }}</td>
+                        <td class="text-center fw-bolder">{{ $dataDCU->kadar_oksigen }}</td>
+                        <td class="text-center fw-bolder">{{ $dataDCU->detak_jantung }}</td>
+                        <td class="text-center fw-bolder">{{ $dataDCU->tekanan_darah }}</td>
+                        {{-- <td class="text-center" style="cursor: default"><span class="text-danger">Hapus</span> | <span class="text-warning">Edit</span></td> --}}
+                    </tr>
+                @empty
+            
+                @endforelse
+                
+            @empty
+                
+            @endforelse
               <tr>
                   <td class="text-center">1</td>
                   <td class="text-center">19 Juni 2024</td>

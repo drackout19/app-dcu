@@ -13,24 +13,49 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('beranda');
-});
+// Route::get('/', function () {
+//     return view('beranda');
+// });
 
-Route::get('/dashboard', function () {
-    return view('beranda');
-});
+// Route::get('/dashboard', function () {
+//     return view('beranda');
+// });
 
-Route::get('/manpower', function () {
-    return view('manpower');
-});
+// Route::get('/manpower', function () {
+//     return view('manpower.index', [
+//         "title" => "Page Manpower",
+//         "manpowers" => App\Models\Manpower::all()
+//     ]);
+// });
 
-Route::get('/rekap-dcu', function () {
-    return view('rekapDcu');
-});
+// Route::resource('/', \App\Http\Controllers\TimesheetController::class);
+
+Route::resource('/dashboard', \App\Http\Controllers\TimesheetController::class);
+
+Route::put('/dashboard/storeDCU/{id}', [\App\Http\Controllers\TimesheetController::class, 'storeDCU'])->name('dashboard.storeDCU');
+Route::put('/dashboard/storeTimesheet/{id}', [\App\Http\Controllers\TimesheetController::class, 'storeTimesheet'])->name('dashboard.storeTimesheet');
+
+Route::resource('/manpower', \App\Http\Controllers\ManpowerController::class);
+
+Route::resource('/dcu-recap', \App\Http\Controllers\DcurecapController::class);
+// Route::delete('/manpower/{manpower:id}', [\App\Http\Controllers\ManpowerController::class, 'delete']);
+
+// Route::get('/manpower/addperson', function () {
+//     return view('manpower.addperson', [
+//         "title" => "Add Person Manpower"
+//     ]);
+// });
+
+// Route::resource('/manpower/create', \App\Http\Controllers\ManpowerController::class);
+
+// Route::get('/rekap-dcu', function () {
+//     return view('rekapDcu');
+// });
 
 Route::get('/rekap-absensi', function () {
-    return view('rekapAbsensi');
+    return view('rekapAbsensi', [
+        "title" => "Page Rekap Absensi"
+    ]);
 });
 
 Route::get('/rekap-slip-gaji', function () {
