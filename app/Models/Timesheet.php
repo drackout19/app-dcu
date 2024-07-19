@@ -16,4 +16,8 @@ class Timesheet extends Model
     public function dcurecap() {
         return $this->belongsTo(Dcurecap::class);
     }
+
+    public function salary() {
+        return $this->belongsTo(Salary::class);
+    }
 }

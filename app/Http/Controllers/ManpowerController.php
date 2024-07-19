@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 
 use App\Models\Manpower;
 
+use App\Models\Salary;
+
 class ManpowerController extends Controller
 {
      /**
@@ -68,7 +70,7 @@ class ManpowerController extends Controller
     public function store(Request $request): RedirectResponse
     {
         //validate form
-        // dd($request);
+        // dd($request->inputGaji);
         try {
             // $this->validate($request, [
             //     'jabatan'     => 'required',
@@ -79,6 +81,7 @@ class ManpowerController extends Controller
             
 
             $manpower = new Manpower();
+            $salary = new Salary();
 
             //  Manpower::create([
             //     'jabatan'     => $request->inputJabatan,
@@ -94,7 +97,9 @@ class ManpowerController extends Controller
                 'nama_pekerja'     => $request->inputNamaPekerja,
                 'tanggal_lahir'   => $request->inputTanggalLahir,
                 'alamat'   => $request->inputAlamat,
-                'no_KTP'   => $request->inputNoktp,
+                'jenis_kelamin'   => $request->inputJenisKelamin,
+                'umur'   => $request->inputUmur,
+                'status_pekerja'   => $request->inputStatusPekerja,
                 'lokasi_kerja'   => $request->inputLokasiKerja,
             ]);
 
@@ -105,14 +110,34 @@ class ManpowerController extends Controller
             // $inputFotoktp->storeAs('public/manpowers/fotoktp/', $inputFotoktp->hashName());
             // $inputFileMCU->storeAs('public/manpowers/suratmcu/', $inputFileMCU->hashName());
 
+            
+
+            if (!empty($request->inputNoRekening)) {
+                $manpower->fill([
+                    'nama_bank'   => $request->inputNamaBank,
+                    'no_rekening'   => $request->inputNoRekening,
+                ]);
+            }
+
             if ($request->hasFile('inputFotoktp')) {
                 $inputFotoktp = $request->file('inputFotoktp');
                 $inputFotoktp->storeAs('public/manpowers/fotoktp/', $inputFotoktp->hashName());
 
                 $manpower->fill([
+                    'no_KTP'   => $request->inputNoktp,
                     'foto_KTP'   => $request->inputFotoktp->hashName()
                 ]);
             }
+
+            if ($request->hasFile('inputFotoDiri')) {
+                $inputFotoDiri = $request->file('inputFotoDiri');
+                $inputFotoDiri->storeAs('public/manpowers/fotodiri/', $inputFotoDiri->hashName());
+
+                $manpower->fill([
+                    'foto_diri'   => $request->inputFotoDiri->hashName()
+                ]);
+            }
+
             if ($request->hasFile('inputFileMCU')) {
                 $inputFileMCU = $request->file('inputFileMCU');
                 $inputFileMCU->storeAs('public/manpowers/suratmcu/', $inputFileMCU->hashName());
@@ -135,6 +160,7 @@ class ManpowerController extends Controller
                 $inputKartuBadge->storeAs('public/manpowers/foto_kartu_badge/', $inputKartuBadge->hashName());
 
                 $manpower->fill([
+                    'no_kartu_badge'   => $request->inputNoBadge,
                     'kartu_badge'   => $request->inputKartuBadge->hashName()
                 ]);
             }
@@ -201,6 +227,33 @@ class ManpowerController extends Controller
 
             $manpower->save();
 
+            // $getManpowerIdPerson = Manpower::where
+
+            if (!empty($request->inputNoRekening)) {
+                $salary->fill([
+                    'manpower_id'   => $manpower->id,
+                    'nama_bank'   => $request->inputNamaBank,
+                    'no_rekening'   => $request->inputNoRekening,
+                ]);
+            }
+
+            if (!empty($request->inputGajiPokok) && $request->inputStatusPekerja == 'Tetap') {
+                $salary->fill([
+                    'gaji_pokok'   => $request->inputGajiPokok,
+                ]);
+
+                $salary->save();
+            }
+
+            if (!empty($request->inputGajiHarian) && !empty($request->inputGajiLembur) && $request->inputStatusPekerja == 'Lepas') {
+                $salary->fill([
+                    'manpower_id'   => $manpower->id,
+                    'gaji_harian'   => $request->inputGajiHarian,
+                    'gaji_lembur'   => $request->inputGajiLembur,
+                ]);
+                $salary->save();
+            }
+
            
     
             //redirect to index
@@ -238,12 +291,14 @@ class ManpowerController extends Controller
     {
         //get post by ID
         $data = Manpower::findOrFail($id);
+        $dataSalary = Salary::where('manpower_id', $id);
 
         //delete image
         // Manpower::delete('public/posts/'. $post->image);
 
         //delete post
         $data->delete();
+        $dataSalary->delete();
 
         //redirect to index
         return redirect()->route('manpower.index')->with(['success' => 'Data Berhasil Dihapus!']);
@@ -336,6 +391,7 @@ class ManpowerController extends Controller
              $manpower->fill([
                 'jabatan'     => $request->inputJabatan,
                 'nama_pekerja'     => $request->inputNamaPekerja,
+                'jenis_kelamin'     => $request->inputJenisKelamin,
                 'tanggal_lahir'   => $request->inputTanggalLahir,
                 'alamat'   => $request->inputAlamat,
                 'no_KTP'   => $request->inputNoktp,
@@ -349,6 +405,25 @@ class ManpowerController extends Controller
 
             // $inputFotoktp->storeAs('public/manpowers/fotoktp/', $inputFotoktp->hashName());
             // $inputFileMCU->storeAs('public/manpowers/suratmcu/', $inputFileMCU->hashName());
+
+            if (!empty($request->inputNoRekening)) {
+                $manpower->fill([
+                    'nama_bank'   => $request->inputNamaBank,
+                    'no_rekening'   => $request->inputNoRekening,
+                ]);
+            }
+
+            if ($request->hasFile('inputFotoDiri')) {
+                $inputFotoDiri = $request->file('inputFotoDiri');
+                $inputFotoDiri->storeAs('public/manpowers/fotodiri/', $inputFotoDiri->hashName());
+
+                //delete old image
+                Storage::delete('public/manpowers/fotodiri/'.$manpower->foto_diri);
+
+                $manpower->fill([
+                    'foto_diri'   => $request->inputFotoDiri->hashName()
+                ]);
+            }
 
             if ($request->hasFile('inputFotoktp')) {
                 $inputFotoktp = $request->file('inputFotoktp');

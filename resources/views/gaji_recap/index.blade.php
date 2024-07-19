@@ -19,75 +19,11 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
 
-{{-- ini style css untuk handle sticky notes jgn utak atik gw jga ga ngerti --}}
-<style>
-    
-    .float-sticky-note h6, .float-sticky-note-masuk-kerja h6{
-    font-family: 'Lato';
-    font-weight: bold;
-    }
-
-    .float-sticky-note p, .float-sticky-note-masuk-kerja p{
-    font-family: 'Rubik';
-    font-weight: 400;
-    }
-    .float-sticky-note ul,li, .float-sticky-note-masuk-kerja ul{
-    list-style:none;
-    }
-    ul{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    }
-    .float-sticky-note ul li a, .float-sticky-note-masuk-kerja ul li a{
-    text-decoration:none;
-    color:#000;
-    background:#ffc;
-    display:block;
-    min-height:10em;
-    max-width:10em;
-    padding:1em;
-    box-shadow: 5px 5px 7px rgba(33,33,33,.7);
-    transform: rotate(-6deg);
-    transition: transform .15s linear;
-    }
-
-    .float-sticky-note ul li:nth-child(even) a, .float-sticky-note-masuk-kerja ul li:nth-child(even) a{
-    transform:rotate(4deg);
-    position:relative;
-    top:5px;
-    background:#cfc;
-    }
-    /* .float-sticky-note ul li:nth-child(3n) a{
-    transform:rotate(-3deg);
-    position:relative;
-    top:-5px;
-    background:#ccf;
-    }
-    .float-sticky-note ul li:nth-child(5n) a{
-    transform:rotate(5deg);
-    position:relative;
-    top:-10px;
-    } */
-
-    .float-sticky-note ul li a:hover,ul li a:focus, .float-sticky-note-masuk-kerja ul li a:hover{
-    box-shadow:10px 10px 7px rgba(0,0,0,.7);
-    transform: scale(1.25);
-    position:relative;
-    z-index:5;
-    }
-
-    .float-sticky-note ul li, .float-sticky-note-masuk-kerja ul li{
-    margin:1em;
-    }
-</style>
-
-
 @endsection
 
 @section('konten')
     {{-- content body --}}
-    
+
 
       <div class="rounded bg-white p-2">
           <h5>Rekap Slip Gaji</h5>
@@ -119,31 +55,38 @@
               <tr class="text-center">
                   <th class="text-center">No</th>
                   <th class="text-center">Id Badge</th>
-                  <th class="text-center">Jabatan</th>
+                  <th class="text-center">Posisi</th>
                   <th class="text-center">Nama</th>
                   <th class="text-center">No KTP</th>
                   <th class="text-center">No Rekening</th>
-                  <th class="text-center">Gaji Pokok</th>
-                  <th class="text-center">Gaji Lembur</th>
-                  <th class="text-center">Gaji Bersih</th>
-                  {{-- <th class="text-center">Opsi</th> --}}
+                  <th class="text-center">Total Gaji Pokok</th>
+                  <th class="text-center">Total Gaji Harian</th>
+                  <th class="text-center">Total Gaji Lembur</th>
+                  <th class="text-center">Total Gaji Bersih</th>
+                  <th class="text-center">Opsi</th>
               </tr>
           </thead>
           <tbody >
-              <tr>
-                  <td class="text-center">1</td>
-                  <td class="text-center">27501</td>
-                  <td class="text-start">Supervisor</td>
-                  <td class="text-start">Micu Turismo</td>
-                  <td class="text-center">321232323122131</td>
-                  <td class="text-center"><span>BRI</span>: <span>43674374364</span></td>
-                  <td class="text-center fw-bolder">RP. 5.000.000</td>
-                  <td class="text-center fw-bolder">RP. 200.000</td>
-                  <td class="text-center fw-bolder">RP. 5.200.000</td>
-                  {{-- <td class="text-center" style="cursor: default"><span class="text-danger">Hapus</span> | <span class="text-warning">Edit</span></td> --}}
-              </tr>
-              <tr>
-                  <td class="text-center">2</td>
+            @forelse($manpowers as $manpower)
+                <tr>
+                    <td class="text-center">{{ $loop->iteration }}</td>
+                    <td class="text-center">{{ $manpower->id_badge }}</td>
+                    <td class="text-center">{{ $manpower->jabatan }}</td>
+                    <td class="text-center">{{ $manpower->nama_pekerja }}</td>
+                    <td class="text-center">{{ $manpower->no_ktp }}</td>
+
+                    <td class="text-center"><span class="fw-bolder">{{ $manpower->salary->nama_bank }}</span><br> <span>{{ $manpower->salary->no_rekening }}</span></td>
+                    <td class="text-center fw-bolder">{{ ($manpower->salary->gaji_pokok != null) ? number_format($manpower->salary->gaji_pokok, 0, ',', '.') : '-' }}</td>
+                    <td class="text-center fw-bolder">{{ ($manpower->salary->jumlah_gaji_harian) ? number_format($manpower->salary->jumlah_gaji_harian, 0, ',', '.')  : '-' }}</td>
+                    <td class="text-center fw-bolder">{{ $manpower->salary->jumlah_gaji_lembur ? number_format($manpower->salary->jumlah_gaji_lembur, 0, ',', '.')  : '-' }}</td>
+                    <td class="text-center fw-bolder">{{ $manpower->salary->jumlah_gaji_bersih ? number_format($manpower->salary->jumlah_gaji_bersih, 0, ',', '.') : '-' }}</td>
+                    <td class="text-center fw-bolder"><a href="{{ route('rekap-slip-gaji.show', $manpower->id) }}" class="btn btn-sm btn-dark mt-1 mb-1" style="width: 100%">DETAIL</a></td>
+                </tr>
+            @empty
+            @endforelse
+              
+              {{-- <tr> --}}
+                  {{-- <td class="text-center">2</td>
                   <td class="text-center">27501</td>
                   <td class="text-start">Projek Koordinator</td>
                   <td class="text-start">Kicu Freeze</td>
@@ -151,9 +94,9 @@
                   <td class="text-center"><span>BRI</span>: <span>43674374364</span></td>
                   <td class="text-center fw-bolder">RP. 5.000.000</td>
                   <td class="text-center fw-bolder">RP. 200.000</td>
-                  <td class="text-center fw-bolder">RP. 5.200.000</td>
+                  <td class="text-center fw-bolder">RP. 5.200.000</td> --}}
                   {{-- <td class="text-center" style="cursor: default"><span class="text-danger">Hapus</span> | <span class="text-warning">Edit</span></td> --}}
-              </tr>
+              {{-- </tr> --}}
           </tbody>
       </table>
 

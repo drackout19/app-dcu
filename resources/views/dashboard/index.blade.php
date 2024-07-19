@@ -78,8 +78,36 @@
 @endsection
 
 @section('konten')
+
+    {{-- {{ Session::get('nama')}}
+    {{ Session::get('umur');}} --}}
     {{-- content body --}}
+    {{-- @php echo if(Session::get('umur') ? echo "yes" : echo 'no' ) @endphp --}}
+    {{-- @if (Session::get('umur')) {
+        {{ 'none' }}
+    }
+
     
+        
+    @else
+        {{ '' }}
+    @endif --}}
+    
+    {{-- {{ Session::get('dateThisDay') }} --}}
+    {{ "Value resetTimesheet : " . Session::get('resetTimesheet') }}
+    {{ ". Value isHiddenBtnDCU : " . Session::get('isHiddenBtnDCU') }}
+
+        @php
+            unset($_SESSION['id']);
+            session_start();
+ 
+            // if(!isset( $_SESSION['id'])) {
+                
+                // $_SESSION['id'] = array();
+                // unset($_SESSION['id']);
+            // }
+            
+        @endphp
 
       <div class="rounded bg-white p-2">
           <h5>Dashboard</h5>
@@ -107,6 +135,8 @@
               </tr>
           </thead>
           <tbody >
+           
+
             @forelse ($manpowers as $data)
                 
                 <tr>
@@ -116,38 +146,77 @@
                     @method("PUT")
                     <section>
                         <td class="text-center">{{  $loop->iteration }}</td>
-                        <td class="text-center"><input type="date" class="inputDate"  id="inputDate{{ $data->id }}"  name="inputDate{{ $data->id }}" style="background: transparent; max-width: 105px; border: none" readonly></td>
-                        <td class="text-center">27501</td>
+                        <td class="text-center"><input type="date" class="inputDate"  id="inputDate{{ $data->id }}"  name="inputDate{{ $data->id }}" style="background: transparent; max-width: 105px; border: none" readonly ></td>
+                        <td class="text-center">{{ $data->no_kartu_badge }}</td>
                         <td class="text-start">{{ $data->jabatan }}</td>
                         <td class="text-start">{{ $data->nama_pekerja }}</td>
                     
                         <td class="text-center">
+                            
                             <input type="hidden" id="inputStatusDCU{{ $data->id }}" name="inputStatusDCU{{ $data->id }}">
                             <input type="hidden" id="inputSuhuBadan{{ $data->id }}" name="inputSuhuBadan{{ $data->id }}">
                             <input type="hidden" id="inputKadarOksigenDarah{{ $data->id }}" name="inputKadarOksigenDarah{{ $data->id }}">
                             <input type="hidden" id="inputDetakJantung{{ $data->id }}" name="inputDetakJantung{{ $data->id }}">
                             <input type="hidden" id="inputTekananSistolik{{ $data->id }}" name="inputTekananSistolik{{ $data->id }}">
                             <input type="hidden" id="inputTekananDiastolik{{ $data->id }}" name="inputTekananDiastolik{{ $data->id }}">
-                            {{-- <div id="container-form-select-dcu">
-                                <select class="form-select" aria-label="Default select example" id="form-select-dcu">
-                                    <option value="default" selected>Open this select menu</option>
-                                    <option value="FIT">FIT</option>
-                                    <option value="Fith With Note" aria-label="">FIT With Note</option>
-                                </select>
-                            </div> --}}
-                            <span id="btn-dcu{{ $data->id }}">
-                                @forelse ($data->dcurecap as $dataDCU) 
-                                    @if($data->id == $dataDCU->manpower_id && $dataDCU->status_dcu != null)
+                            
+                            
+                            <span>
+
+                                {{-- {{ dd(Session::get('dateThisDay')) }} --}}
+                                
+                                {{-- kontol --}}
+                                {{-- @if(Session::get('resetTimesheet') == 'false')  --}}
+                                <span style="display: none" id="resetTimesheet" aria-label="{{ Session::get('resetTimesheet') }}"></span>
+                                @if(Session::get('resetTimesheet') == 'false') 
+                                    @forelse ($data->dcurecap->where('tanggal', Session::get('dateThisDay')) as $dataDCU ) 
+
+                                                {{-- {{ $dataDCU->all() }} --}}
                                         
-                                       {!! "<b>$dataDCU->status_dcu</b>" !!}
-                                       @break
-                                    @endif
-                                @empty
-                                    <span class="btn btn-sm btn-success" onclick="activeFloatFormDcu({{ $data->id }})">DCU</span> 
-                                @endforelse
-                            </span>
-                            <span class="material-symbols-outlined m-2" style="display: none; cursor: default;" id="icon-showing-note-dcu">
-                                description
+                                                @if($data->id == $dataDCU->manpower_id && $dataDCU->status_dcu != null)
+                                                    
+                                                {!! "<b>$dataDCU->status_dcu</b>" !!}
+                                                
+                                                <br>
+                                                <span class="text-primary fw-bolder" style="cursor: pointer; display: none" id="ubahStatusDCU{{ $data->id }}" onclick="ubahStatusDCU({{ $data->id }})">ubah</span>
+                                                {{-- @break --}}
+
+                                                @else
+                                                    {{-- @if ($data->id == $dataDCU->manpower_id && $dataDCU->tanggal == "2024-07-08") --}}
+                                                        
+                                                        {{-- <span class="btn btn-sm btn-success" style="display : {{ (Session::get('isHiddenBtnDCU') == 'false') ? '' : 'none' }}" id="btn-dcu{{ $data->id }}" onclick="activeFloatFormDcu({{ $data->id }})">DCU bang</span>  --}}
+                                                    {{-- @endif --}}
+                                                    
+                                                        {{-- // Session::put('dateThisDay' , Session::get('dateThisDay'));
+                                                        // Session::put('dateThisDay' , "2024-07-09"); --}}
+                                                
+                                                @endif
+
+                                            
+                                    @empty
+
+                                    
+
+                                        {{-- @if (Session::get('resetTimesheet') == 'false') --}}
+                                            {{-- <span class="btn btn-sm btn-success" style="display : {{ (Session::get('isHiddenBtnDCU') == 'false') ? '' : 'none' }}" id="btn-dcu{{ $data->id }}" onclick="activeFloatFormDcu({{ $data->id }})">DCU brok</span>  --}}
+                                            <span class="btn btn-sm btn-success" style="display : {{ (Session::get('isHiddenBtnDCU') == 'false') ? '' : 'none' }}"  id="btn-dcu{{ $data->id }}" onclick="activeFloatFormDcu({{ $data->id }})">DCU empty</span> 
+                                            
+                                           
+                                            
+                                            {{-- @php --}}
+                                                {{-- // Session::put('dateThisDay' , Session::get('dateThisDay'));
+                                                Session::put('dateThisDay' , "2024-07-09"); --}}
+                                            {{-- @endphp --}}
+                                        {{-- @endif --}}
+                                        {{-- <span class="btn btn-sm btn-success" style="display : {{ (Session::get('isHiddenBtnDCU') == 'false') ? '' : 'none' }}" id="btn-dcu{{ $data->id }}" onclick="activeFloatFormDcu({{ $data->id }})">DCU brok</span>  --}}
+                                    @endforelse
+                                @else
+
+                                    <span class="btn btn-sm btn-success" style="display : {{ (Session::get('isHiddenBtnDCU') == 'false') ? '' : 'none' }}" id="btn-dcu{{ $data->id }}" onclick="activeFloatFormDcu({{ $data->id }})">DCU baru</span> 
+                                    
+                                @endif
+                                
+                                
                             </span>
                             {{-- the function of this div to be float form when button DCU has clicked --}}
                             <div style="display: none" id="container-form-dcu{{ $data->id }}">
@@ -294,159 +363,336 @@
                                 </div>
                             </div>
 
-                            {{-- The function of this float is showing input form when option selected is value 2 or Fit With Note --}}
-                            <div class="p-2 rounded" style="background: grey ;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%); width: max-content; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); display: none" id="float-note-dcu">
-                                <textarea class="rounded" name="" id="textarea-float-note" cols="20" rows="5" placeholder="Tuliskan catatan disini..." ></textarea>
-                                <div class="ms-auto" style="width: max-content">
-                                    <button class="btn btn-sm btn-secondary" id="btn-cancel-float-note">Cancel</button>
-                                    <button class="btn btn-sm btn-primary" id="btn-yes-float-note">Okee!</button>
-                                </div>
-                                <span class="text-white" id="alert-for-float-note-dcu"></span>
-                            </div>
-
-                            {{-- The function of this float is showing sticky note of dcu --}}
-                            <div class="float-sticky-note"  style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%); width: max-content; display: none" id="float-sticky-note">
-                                <ul>
-                                    <li>
-                                    <a href="#" contenteditable>
-                                        <h6>Warning Note!</h6>
-                                        <hr>
-                                        <p id="konten-sticky-note"></p>
-                                    </a>
-                                    
-                                    </li>
-                                    <span class="material-symbols-outlined fw-bold text-danger" style="position: absolute; right: 3px; top: -12px; font-size: 30px; cursor: default; z-index: 6;" id="click_close_sticky_note">
-                                        cancel
-                                    </span>
-                                </ul>
-                                
-                            </div>
+                            
 
                         </td>
-                    
-                        {{-- btn masuk kerja  --}}
-                        <td class="text-center">
-                            <form action="{{ route('dashboard.storeTimesheet', $data->id) }}" id="formTimesheet{{ $data->id }}" method="post" enctype="multipart/form-data">
+                        {{-- /////////////////////////////////////////////////////////////////////////// --}}
+                        @php
+                            $dcurecap_id = 0;
+                            foreach ($data->dcurecap as $dataDCU) {
+                                $dcurecap_id = $dataDCU->id;
+                            }
+                        @endphp
+
+                        <form action="{{ route('dashboard.storeTimesheet',  [$data->id, $dcurecap_id]) }}" id="formTimesheet{{ $data->id }}" method="post" enctype="multipart/form-data">
                             @csrf
                             @method("PUT")
-                                <input type="hidden" id="inputJamMasuk{{ $data->id }}" name="inputJamMasuk{{ $data->id }}">
-                                <input type="hidden" id="inputJamLembur{{ $data->id }}" name="inputJamLembur{{ $data->id }}">
-                                <input type="hidden" id="inputJamPulang{{ $data->id }}" name="inputJamPulang{{ $data->id }}">
-                                <div id="jamMasuk{{ $data->id }}">
+                            <input type="hidden" id="inputJamMasuk{{ $data->id }}" name="inputJamMasuk{{ $data->id }}">
+                            <input type="hidden" id="inputJamLembur{{ $data->id }}" name="inputJamLembur{{ $data->id }}">
+                            <input type="hidden" id="inputJamPulang{{ $data->id }}" name="inputJamPulang{{ $data->id }}">
+                            <input type="hidden" id="inputTotalWaktuLembur{{ $data->id }}" name="inputTotalWaktuLembur{{ $data->id }}">
+                            <input type="hidden" id="inputKeteranganMasuk{{ $data->id }}" name="inputKeteranganMasuk{{ $data->id }}">
+                            <input type="hidden" id="inputKeteranganLembur{{ $data->id }}" name="inputKeteranganLembur{{ $data->id }}">
+                            <input type="hidden" id="inputKeteranganPulang{{ $data->id }}" name="inputKeteranganPulang{{ $data->id }}">
+                            <input type="hidden" id="inputUbahJamMasuk{{ $data->id }}" name="inputUbahJamMasuk{{ $data->id }}">
+                            <input type="hidden" id="inputUbahJamLembur{{ $data->id }}" name="inputUbahJamLembur{{ $data->id }}">
+                            <input type="hidden" id="inputUbahJamPulang{{ $data->id }}" name="inputUbahJamPulang{{ $data->id }}">
+
+
+                        {{-- \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ --}}
+                    
+                            {{-- btn masuk kerja  --}}
+                            <td class="text-center">
+                                
+                                {{-- @foreach ($data->dcurecap as $dataDCU)
+                                    @php
+                                        $dcurecap_id = $dataDCU->id;
+                                    @endphp
+                                @endforeach --}}
+                                {{-- <form action="{{ route('dashboard.storeTimesheet',  [$data->id, $dcurecap_id]) }}" id="formTimesheet{{ $data->id }}" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    @method("PUT")
+                                    <input type="hidden" id="inputJamMasuk{{ $data->id }}" name="inputJamMasuk{{ $data->id }}">
+                                    <input type="hidden" id="inputJamLembur{{ $data->id }}" name="inputJamLembur{{ $data->id }}">
+                                    <input type="hidden" id="inputJamPulang{{ $data->id }}" name="inputJamPulang{{ $data->id }}">
+                                    <input type="hidden" id="inputKeteranganMasuk{{ $data->id }}" name="inputKeteranganMasuk{{ $data->id }}"> --}}
                                     
-                                    @forelse ($data->dcurecap as $dataDCU) 
-                                        @if($data->id == $dataDCU->manpower_id && $dataDCU->status_dcu !== "UNFIT")
-                                            
-                                            <span class="btn btn-success p-1 pt-0" id="btn-masuk-kerja{{ $data->id }}" onclick="startMasukKerja({{ $data->id }})">Masuk</span>
-                                        @break
-                                        @else
-                                        <button class="btn btn-secondary p-1 pt-0" disabled>Masuk</button>
+                                    <div id="jamMasuk{{ $data->id }}">
+                                        
+                                        @php
+                                            $loopBreakDataDCUMasuk = true;
+                                        @endphp
+                                        @if(Session::get('resetTimesheet') == 'false')
+                                            @forelse ($data->dcurecap->where('tanggal', Session::get('dateThisDay')) as $dataDCU) 
+                                                @if($data->id == $dataDCU->manpower_id && $dataDCU->status_dcu !== "UNFIT")
+                                                        @foreach ($timesheet as $dataTimesheet)
+                                                            {{-- {{ dd($dataTimesheet->dcurecap_id) }} --}}
+                                                            {{-- {{ dd($dataDCU->id) }} --}}
+                                                            @if($dataTimesheet->dcurecap_id == $dataDCU->id && $dataDCU->status_dcu !== "UNFIT" && $dataTimesheet->jamMasuk != null)
+                                                                {{-- {!! "<b>$dataTimesheet->jamMasuk" !!} --}}
+                                                                <span id="textJamMasuk{{ $data->id }}">{!! "<b>$dataTimesheet->jamMasuk" !!}</span>
+                                                                <input type="time" style="display: none" id="ubahJamMasuk{{ $data->id }}" onchange="ubahJamMasuk({{ $data->id }})">
+                                                                    
+                                                                {{-- keterangan tapi di hidden --}}
+                                                                <span style="display: none" id="keteranganMasuk{{ $data->id }}">{{ $dataTimesheet->keterangan_masuk }}</span>
+                                                                
+                                                                @if($dataTimesheet->keterangan_masuk != null)
+                                                                    <span class="material-symbols-outlined m-2" style="cursor: default;" id="icon-showing-note-masuk-kerja{{ $data->id }}" onclick="showNoteMasukKerja({{$data->id }})">
+                                                                        description
+                                                                    </span>
+                                                                @endif
+                                                                @php
+                                                                    
+                                                                    $loopBreakDataDCUMasuk = false;
+
+                                                                    // $_SESSION['id'][0]
+                                                                    array_push($_SESSION['id'], $data->id);
+                                                                    
+                                                                @endphp
+                                                                @break
+
+                                                                {{-- <button type="button" class="btn btn-success p-1 pt-0"  id="btn-masuk-kerja{{ $data->id }}" onclick="startMasukKerja({{ $data->id }})">Masuk woy</button>
+                                                                @break --}}
+                                                            @endif
+                                                        
+                                                            {{-- <button class="btn btn-secondary p-1 pt-0" disabled>Masuk</button> --}}
+                                                            {{-- <span class="btn btn-success p-1 pt-0" id="btn-masuk-kerja{{ $data->id }}" onclick="startMasukKerja({{ $data->id }})">Masuk</span> --}}
+                                                        @endforeach
+                                                        @if($loopBreakDataDCUMasuk == false) @break @endif
+
+                                                        {{-- aktifin lagi ya --}}
+                                                        <button type="button"  class="btn btn-success p-1 pt-0"  id="btn-masuk-kerja{{ $data->id }}" onclick="startMasukKerja({{ $data->id }})">Masuk</button>
+                                                    {{-- @continue --}}
+                                                
+                                                @endif
+                                            @empty
+                                                <button type="button" style="display: none" class="btn btn-secondary p-1 pt-0" disabled>Masuk</button>
+                                            @endforelse
                                         @endif
-                                    @empty
-                                        <button class="btn btn-secondary p-1 pt-0" disabled>Masuk</button>
-                                    @endforelse
-                                    {{-- <button class="btn btn-secondary p-1 pt-0" id="btn-masuk-kerja{{ $data->id }}" onclick="startMasukKerja({{ $data->id }})" disabled>Masuk</button> --}}
+                                        {{-- <button class="btn btn-secondary p-1 pt-0" id="btn-masuk-kerja{{ $data->id }}" onclick="startMasukKerja({{ $data->id }})" disabled>Masuk</button> --}}
+                                    </div>
+                                    {{-- <span class="material-symbols-outlined m-2" style="display: none; cursor: default;" id="icon-showing-note-masuk-kerja{{ $data->id }}" onclick="showNoteMasukKerja({{$data->id }})">
+                                        description
+                                    </span> --}}
+                                    {{-- The function of this float is showing input form when option selected is value 2 or Fit With Note --}}
+                                    <div class="p-2 rounded" style="background: grey ;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%); width: max-content; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); display: none" id="float-note-masuk-kerja{{ $data->id }}">
+                                        <textarea class="rounded" name="" id="textarea-float-note-masuk-kerja{{ $data->id }}" cols="20" rows="5" placeholder="*opsional, Ketikkan keterangan disini..." ></textarea>
+                                        <div class="ms-auto" style="width: max-content">
+                                            <span class="btn btn-sm btn-secondary" id="btn-cancel-float-note-masuk-kerja" onclick="cancelMasukKerja({{ $data->id }})">Cancel</span>
+                                            <span class="btn btn-sm btn-primary" id="btn-yes-float-note-masuk-kerja" onclick="yesMasukKerja({{ $data->id }})">Masuk</span>
+                                        </div>
+                                    </div>
+                                    {{-- The function of this float is showing sticky note of masuk kerja --}}
+                                    <div class="float-sticky-note"  style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%); width: max-content; display: none" id="float-sticky-note-masuk-kerja{{ $data->id }}">
+                                        <ul>
+                                            <li>
+                                            <a href="#">
+                                                <h6>Keterangan Absen Masuk</h6>
+                                                <hr>
+                                                <p id="konten-sticky-note-masuk-kerja{{ $data->id }}"></p>
+                                            </a>
+                                            
+                                            </li>
+                                            <span class="material-symbols-outlined fw-bold text-danger" style="position: absolute; right: 3px; top: -12px; font-size: 30px; cursor: default; z-index: 6;" id="click_close_sticky_note_masuk_kerja" onclick="closeStickyNoteMasukKerja({{ $data->id }})">
+                                                cancel
+                                            </span>
+                                        </ul>
+                                        
+                                    </div>
+                                
+                            </td>
+                        
+                            {{-- btn lembur kerja--}}
+                            <td class="text-center" >
+                                <div id="jamLembur{{ $data->id }}">
+                                    @php
+                                        $loopBreakDataDCULembur = true;
+                                    @endphp
+                                    @if(Session::get('resetTimesheet') == 'false')
+                                        @forelse ($data->dcurecap->where('tanggal', Session::get('dateThisDay')) as $dataDCU) 
+                                                    @foreach ($timesheet as $dataTimesheet)
+                                                        @if($dataTimesheet->dcurecap_id == $dataDCU->id && $dataDCU->status_dcu !== "UNFIT"  && $dataTimesheet->jamLembur != null) 
+                                                            <span id="textJamLembur{{ $data->id }}">{!! "<b>$dataTimesheet->jamLembur</b>" !!}</span>
+                                                            <input type="time" style="display: none" id="ubahJamLembur{{ $data->id }}" onchange="ubahJamLembur({{ $data->id }})">
+
+                                                            {{-- keterangan tapi di hidden --}}
+                                                            <span style="display: none" id="keteranganLembur{{ $data->id }}" aria-label="ambilLembur">{{ $dataTimesheet->keterangan_lembur }}</span>
+                                                            
+
+                                                            @if($dataTimesheet->keterangan_lembur != null)
+                                                                <span class="material-symbols-outlined m-2" style="cursor: default;" id="icon-showing-note-lembur-kerja{{ $data->id }}" onclick="showNoteLemburKerja({{$data->id }})">
+                                                                    description
+                                                                </span>
+                                                            @endif
+                                                            @php
+                                                                $loopBreakDataDCULembur = false;
+                                                                
+                                                            @endphp
+                                                            @break
+                                                        @endif
+                                                    @endforeach
+                                                    @if($loopBreakDataDCULembur == false) @break @endif
+
+                                                    {{-- aktifin lagi aja --}}
+                                                    {{-- <button type="button" style="display: none" class="btn btn-success p-1 pt-0" id="btn-lembur-kerja{{ $data->id }}" onclick="startLemburKerja({{ $data->id }})">Lembur</button> --}}
+                                                    
+                                                    {{-- coba --}}
+                                                    @php
+                                                        $loopBreakDataDCUTotalLembur = true;
+                                                    @endphp
+                                                    @forelse ($data->dcurecap->where('tanggal', Session::get('dateThisDay')) as $dataDCU) 
+                                                        @foreach ($timesheet->where('dcurecap_id', '') as $dataTimesheet)
+                                                            @if($dataTimesheet->dcurecap_id == $dataDCU->id && $dataTimesheet->totalWaktuLembur == null && $dataTimesheet->jamPulang != null )
+                                                                {{ "-" }}
+                                                                @php
+                                                                    $loopBreakDataDCULembur = false;
+                                                                @endphp
+                                                                @break
+                                                            @endif
+                                                        @endforeach
+                                                            @if($loopBreakDataDCULembur == false) @break @endif
+                                                            @if($dataDCU->status_dcu != "UNFIT")
+                                                                <button type="button" style="display: 'none'" class="btn btn-success p-1 pt-0" id="btn-lembur-kerja{{ $data->id }}" onclick="startLemburKerja({{ $data->id }})">Lembur</button>
+                                                            @endif
+                                                        @empty
+                                                        {{ "-" }}
+                                                    @endforelse
+                                                    {{-- end coba --}}
+                                        @empty
+                                            <button style="display: none" class="btn btn-secondary p-1 pt-0" disabled>Lembur</button>      
+                                        @endforelse
+                                    @endif
                                 </div>
-                                <span class="material-symbols-outlined m-2" style="display: none; cursor: default;" id="icon-showing-note-masuk-kerja{{ $data->id }}" onclick="showNoteMasukKerja({{$data->id }})">
+                                {{-- <span class="material-symbols-outlined m-2" style="display: none; cursor: default;" id="icon-showing-note-lembur-kerja{{ $data->id }}">
                                     description
-                                </span>
+                                </span> --}}
                                 {{-- The function of this float is showing input form when option selected is value 2 or Fit With Note --}}
-                                <div class="p-2 rounded" style="background: grey ;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%); width: max-content; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); display: none" id="float-note-masuk-kerja{{ $data->id }}">
-                                    <textarea class="rounded" name="" id="textarea-float-note-masuk-kerja{{ $data->id }}" cols="20" rows="5" placeholder="*opsional, Ketikkan keterangan disini..." ></textarea>
+                                <div class="p-2 rounded" style="background: grey;position: absolute; top: 50%;left: 60%;transform: translate(-50%, -50%); width: max-content; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); display: none" id="float-note-lembur-kerja{{ $data->id }}">
+                                    <textarea class="rounded" name="" id="textarea-float-note-lembur-kerja{{ $data->id }}" cols="20" rows="5" placeholder="*opsional, Ketikkan keterangan disini..." ></textarea>
                                     <div class="ms-auto" style="width: max-content">
-                                        <span class="btn btn-sm btn-secondary" id="btn-cancel-float-note-masuk-kerja" onclick="cancelMasukKerja({{ $data->id }})">Cancel</span>
-                                        <span class="btn btn-sm btn-primary" id="btn-yes-float-note-masuk-kerja" onclick="yesMasukKerja({{ $data->id }})">Masuk</span>
+                                        <span class="btn btn-sm btn-secondary" id="btn-cancel-float-note-lembur-kerja" onclick="cancelLemburKerja({{ $data->id }})">Cancel</span>
+                                        <span class="btn btn-sm btn-primary" id="btn-yes-float-note-lembur-kerja" onclick="yesLemburKerja({{ $data->id }})">Lembur</span>
                                     </div>
                                 </div>
                                 {{-- The function of this float is showing sticky note of masuk kerja --}}
-                                <div class="float-sticky-note"  style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%); width: max-content; display: none" id="float-sticky-note-masuk-kerja{{ $data->id }}">
+                                <div class="float-sticky-note"  style="position: absolute;top: 50%;left: 60%;transform: translate(-50%, -50%); width: max-content; display: none" id="float-sticky-note-lembur-kerja{{ $data->id }}">
                                     <ul>
                                         <li>
-                                        <a href="#" contenteditable>
-                                            <h6>Keterangan Absen Masuk</h6>
+                                        <a href="#">
+                                            <h6>Keterangan Masuk Lembur</h6>
                                             <hr>
-                                            <p id="konten-sticky-note-masuk-kerja{{ $data->id }}"></p>
+                                            <p id="konten-sticky-note-lembur-kerja{{ $data->id }}"></p>
                                         </a>
                                         
                                         </li>
-                                        <span class="material-symbols-outlined fw-bold text-danger" style="position: absolute; right: 3px; top: -12px; font-size: 30px; cursor: default; z-index: 6;" id="click_close_sticky_note_masuk_kerja" onclick="closeStickyNoteMasukKerja({{ $data->id }})">
+                                        <span class="material-symbols-outlined fw-bold text-danger" style="position: absolute; right: 3px; top: -12px; font-size: 30px; cursor: default; z-index: 6;" id="click_close_sticky_note_lembur_kerja" onclick="closeStickyNoteLemburKerja({{ $data->id }})">
                                             cancel
                                         </span>
                                     </ul>
                                     
                                 </div>
-                            </form>
-                        </td>
-                        {{-- btn lembur kerja--}}
-                        <td class="text-center" >
-                            <div id="jamLembur">
-                                <button class="btn btn-secondary p-1 pt-0" id="btn-lembur-kerja" disabled>Lembur</button>
-                            </div>
-                            <span class="material-symbols-outlined m-2" style="display: none; cursor: default;" id="icon-showing-note-lembur-kerja">
-                                description
-                            </span>
-                            {{-- The function of this float is showing input form when option selected is value 2 or Fit With Note --}}
-                            <div class="p-2 rounded" style="background: grey;position: absolute; top: 50%;left: 60%;transform: translate(-50%, -50%); width: max-content; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); display: none" id="float-note-lembur-kerja">
-                                <textarea class="rounded" name="" id="textarea-float-note-lembur-kerja" cols="20" rows="5" placeholder="*opsional, Ketikkan keterangan disini..." ></textarea>
-                                <div class="ms-auto" style="width: max-content">
-                                    <button class="btn btn-sm btn-secondary" id="btn-cancel-float-note-lembur-kerja">Cancel</button>
-                                    <button class="btn btn-sm btn-primary" id="btn-yes-float-note-lembur-kerja">Masuk</button>
-                                </div>
-                            </div>
-                            {{-- The function of this float is showing sticky note of masuk kerja --}}
-                            <div class="float-sticky-note"  style="position: absolute;top: 50%;left: 60%;transform: translate(-50%, -50%); width: max-content; display: none" id="float-sticky-note-lembur-kerja">
-                                <ul>
-                                    <li>
-                                    <a href="#" contenteditable>
-                                        <h6>Keterangan Masuk Lembur</h6>
-                                        <hr>
-                                        <p id="konten-sticky-note-lembur-kerja"></p>
-                                    </a>
+                            </td>
+                        
+                            <td class="text-center">
+                                <div id="jamPulang{{ $data->id }}">
+
+                                @php
+                                    $loopBreakDataDCUPulang = true;
+                                @endphp
+                                @if(Session::get('resetTimesheet') == 'false')
+                                    @forelse ($data->dcurecap->where('tanggal', Session::get('dateThisDay')) as $dataDCU) 
+                                        
+                                        @foreach ($timesheet as $dataTimesheet)
+                                            @if($dataTimesheet->dcurecap_id == $dataDCU->id && $dataDCU->status_dcu !== "UNFIT"  && $dataTimesheet->jamPulang != null && Session::get('resetTimesheet') == 'false') 
+                                                {{-- {!! "<b>$dataTimesheet->jamPulang</b>" !!} --}}
+                                                <span id="textJamPulang{{ $data->id }}">{!! "<b>$dataTimesheet->jamPulang</b>" !!}</span>
+                                                <input type="time" style="display: none" id="ubahJamPulang{{ $data->id }}" onchange="ubahJamPulang({{ $data->id }})">
+
+                                                {{-- <span id="textJamPulang{{ $data->id }}" >{!! "<b>$dataTimesheet->jamPulang</b>" !!}</span> --}}
+
+                                                {{-- keterangan tapi di hidden --}}
+                                                <span style="display: none" id="keteranganPulang{{ $data->id }}">{{ $dataTimesheet->keterangan_pulang }}</span>
+                                                @if($dataTimesheet->keterangan_pulang != null)
+                                                    <span class="material-symbols-outlined m-2" style="cursor: default;" id="icon-showing-note-pulang-kerja{{ $data->id }}" onclick="showNotePulangKerja({{$data->id }})">
+                                                        description
+                                                    </span>
+                                                @endif
+                                                @php
+                                                    $loopBreakDataDCUPulang = false;
+                                                @endphp
+                                                @break
+                                            @endif
+                                        @endforeach
+                                        @if($loopBreakDataDCUPulang == false) @break @endif
+
+                                        @if($dataDCU->status_dcu != "UNFIT")
+                                            <button type="button" style="display: none" aria-label="{{ Session::get('isPulang'.$data->id) }}" class="btn btn-success p-1 pt-0" id="btn-pulang-kerja{{ $data->id }}" onclick="startPulangKerja({{ $data->id }})">Pulang Bae</button>
+                                        @endif
                                     
-                                    </li>
-                                    <span class="material-symbols-outlined fw-bold text-danger" style="position: absolute; right: 3px; top: -12px; font-size: 30px; cursor: default; z-index: 6;" id="click_close_sticky_note_lembur_kerja">
-                                        cancel
-                                    </span>
-                                </ul>
-                                
-                            </div>
-                        </td>
+                                        
+                                    @empty
+                                        <button style="display: none" class="btn btn-secondary p-1 pt-0" disabled >Pulang AJa</button>
+                                    @endforelse
+                                @endif
+                                    {{-- <span class="btn btn-success p-1 pt-0" id="btn-pulang-kerja" onclick="startPulangKerja({{ $data->id }})">Pulang</span> --}}
+                                </div>
+                                {{-- <span class="material-symbols-outlined m-2" style="display: none; cursor: default;" id="icon-showing-note-pulang-kerja{{ $data->id }}">
+                                    description
+                                </span> --}}
+                                {{-- The function of this float is showing input form when option selected is value 2 or Fit With Note --}}
+                                <div class="p-2 rounded" style="background: grey;position: absolute; top: 50%;left: 75%;transform: translate(-50%, -50%); width: max-content; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); display: none" id="float-note-pulang-kerja{{ $data->id }}">
+                                    <textarea class="rounded" name="" id="textarea-float-note-pulang-kerja{{ $data->id }}" cols="20" rows="5" placeholder="*opsional, Ketikkan keterangan disini..." ></textarea>
+                                    <div class="ms-auto" style="width: max-content">
+                                        <span class="btn btn-sm btn-secondary" id="btn-cancel-float-note-pulang-kerja" onclick="cancelPulangKerja({{ $data->id }})">Cancel</span>
+                                        <span class="btn btn-sm btn-primary" id="btn-yes-float-note-pulang-kerja{{ $data->id }}" onclick="yesPulangKerja({{ $data->id }})">Pulang</span>
+                                    </div>
+                                </div>
+                                {{-- The function of this float is showing sticky note of masuk kerja --}}
+                                <div class="float-sticky-note"  style="position: absolute;top: 50%;left: 75%;transform: translate(-50%, -50%); width: max-content; display: none" id="float-sticky-note-pulang-kerja{{ $data->id }}">
+                                    <ul>
+                                        <li>
+                                        <a href="#">
+                                            <h6>Keterangan Pulang Kerja</h6>
+                                            <hr>
+                                            <p id="konten-sticky-note-pulang-kerja{{ $data->id }}"></p>
+                                        </a>
+                                        
+                                        </li>
+                                        <span class="material-symbols-outlined fw-bold text-danger" style="position: absolute; right: 3px; top: -12px; font-size: 30px; cursor: default; z-index: 6;" id="click_close_sticky_note_pulang_kerja" onclick="closeStickyNotePulangKerja({{ $data->id }})">
+                                            cancel
+                                        </span>
+                                    </ul>
+                                    
+                                </div>
+                            </td>
+                            <td class="text-center text-success fw-bolder" id="totalWaktuLembur{{ $data->id }}">
+                                @php
+                                    $loopBreakDataDCUTotalLembur = true;
+                                @endphp
+                                @if(Session::get('resetTimesheet') == 'false')
+                                    @foreach($data->dcurecap->where('tanggal', Session::get('dateThisDay')) as $dataDCU) 
+                                        @foreach ($timesheet as $dataTimesheet)
+                                            @if($dataTimesheet->dcurecap_id == $dataDCU->id && $dataDCU->status_dcu !== "UNFIT"  && $dataTimesheet->totalWaktuLembur != null)
+                                                {{ $dataTimesheet->totalWaktuLembur }}
+                                                @php
+                                                    $loopBreakDataDCUTotalLembur = false;
+                                                @endphp
+                                                @break
+                                            @endif
+                                        @endforeach
+                                        @if($loopBreakDataDCUTotalLembur == false) @break @endif
+                                        {{ "-" }}
+                                    @endforeach
+                                @endif
+                            </td>
+                        </form>
                     
-                    <td class="text-center">
-                        <div id="jamPulang">
-                            <button class="btn btn-secondary p-1 pt-0" id="btn-pulang-kerja" disabled>Pulang</button>
-                        </div>
-                        <span class="material-symbols-outlined m-2" style="display: none; cursor: default;" id="icon-showing-note-pulang-kerja">
-                            description
-                        </span>
-                        {{-- The function of this float is showing input form when option selected is value 2 or Fit With Note --}}
-                        <div class="p-2 rounded" style="background: grey;position: absolute; top: 50%;left: 75%;transform: translate(-50%, -50%); width: max-content; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); display: none" id="float-note-pulang-kerja">
-                            <textarea class="rounded" name="" id="textarea-float-note-pulang-kerja" cols="20" rows="5" placeholder="*opsional, Ketikkan keterangan disini..." ></textarea>
-                            <div class="ms-auto" style="width: max-content">
-                                <button class="btn btn-sm btn-secondary" id="btn-cancel-float-note-pulang-kerja">Cancel</button>
-                                <button class="btn btn-sm btn-primary" id="btn-yes-float-note-pulang-kerja">Masuk</button>
+                    <td class="text-center" style="cursor: default" id="aksi{{ $data->id }}">
+                        @if(($data->dcurecap->where('manpower_id', $data->id)->first()) != null)
+
+                            <div id="btnAksi{{ $data->id }}">
+                                <span class="btn btn-sm btn-danger" onclick="aksiHapus({{ $data->id }}, {{ $dcurecap_id }})">Hapus</span>  
+                                <span class="btn btn-sm btn-primary" onclick="aksiEdit({{ $data->id }})">Edit</span>
                             </div>
-                        </div>
-                        {{-- The function of this float is showing sticky note of masuk kerja --}}
-                        <div class="float-sticky-note"  style="position: absolute;top: 50%;left: 75%;transform: translate(-50%, -50%); width: max-content; display: none" id="float-sticky-note-pulang-kerja">
-                            <ul>
-                                <li>
-                                <a href="#" contenteditable>
-                                    <h6>Keterangan Pulang Kerja</h6>
-                                    <hr>
-                                    <p id="konten-sticky-note-pulang-kerja"></p>
-                                </a>
-                                
-                                </li>
-                                <span class="material-symbols-outlined fw-bold text-danger" style="position: absolute; right: 3px; top: -12px; font-size: 30px; cursor: default; z-index: 6;" id="click_close_sticky_note_pulang_kerja">
-                                    cancel
-                                </span>
-                            </ul>
-                            
-                        </div>
+                            {{-- when aksi edit is clicked showing this button --}}
+                            <div style="width: 100%; display: none" id="aksiChildEdit{{ $data->id }}">
+                                <span style="width: 100%; display: flex; align-items: center; justify-content: space-evenly"  class="btn btn-sm btn-secondary mb-1" onclick="batalAksiEdit({{ $data->id }})"><span class="material-symbols-outlined">close_small</span>Batal Edit</span>
+                                <span style="width: 100%; display: flex; align-items: center; justify-content: space-evenly"  class="btn btn-sm btn-primary mb-1" onclick="simpanAksiEdit({{ $data->id }}, {{ $dcurecap_id }})"><span class="material-symbols-outlined">check</span>Simpan</span>
+                            </div>
+
+                        @endif
+                        
                     </td>
-                    <td class="text-center" id="totalWaktuLembur">-</td>
-                    <td class="text-center" style="cursor: default"><span class="btn btn-sm btn-danger">Hapus</span>  <span class="btn btn-sm btn-primary">Edit</span></td>
                     
                 </tr>
             
@@ -454,7 +700,7 @@
 
             
             @endforelse
-              <tr>
+              {{-- <tr>
                   <td class="text-center">2</td>
                   <td class="text-center">19-06-2024</td>
                   <td class="text-center">27501</td>
@@ -466,81 +712,55 @@
                   <td class="text-center"><span class="btn btn-secondary p-1 pt-0" disabled>Pulang</span></td>
                   <td class="text-center">-</td>
                   <td class="text-center" style="cursor: default"><span class="text-danger">Hapus</span> | <span class="text-warning">Edit</span></td>
-              </tr>
+              </tr> --}}
           </tbody>
       </table>
 
 
       </div>
 
+      {{-- @php
+        print_r($_SESSION['id']);
+      @endphp --}}
+    @php
+        $_SESSION['id'] = array();
+    @endphp
+
+    @foreach ($manpowers as $data)
+        @php
+            
+            array_push($_SESSION['id'], $data->id);
+        @endphp
+    @endforeach
+
 @endsection
 
 @section('script')
 
 <script>
-    // ---------------------------------------------------------------------------------------------
-    // $("#form-select-dcu").change(function(e){
-    //     let selectedIndex = $(this).prop("selectedIndex");
-    //     if(selectedIndex !== 0) {
-    //         if(selectedIndex === 2) {
-    //             $("#float-note-dcu").fadeIn(500);
-    //             $("#icon-showing-note-dcu").show();
-    //         } else {
-    //             $("#icon-showing-note-dcu").hide();
-    //         }
+    // $('document').ready(function() {
 
-    //         $("#btn-masuk-kerja").removeAttr("disabled");
-    //         $("#btn-masuk-kerja").removeClass("btn-secondary");
-    //         $("#btn-masuk-kerja").addClass("btn-success");
+        // $('body').unload()
 
-    //     } else if(selectedIndex === 0) {
-    //         $("#btn-masuk-kerja").attr("disabled", 'true');
-    //         $("#btn-masuk-kerja").removeClass("btn-success");
-    //         $("#btn-masuk-kerja").addClass("btn-secondary");
-    //     }
-
-    // });
-
-    // $("#btn-yes-float-note").click(function(){
-    //     let valueTextareaFloatNote = $("#textarea-float-note").val();
-    //     if(valueTextareaFloatNote != "") {
-    //         $("#form-select-dcu option:selected").attr("aria-label", valueTextareaFloatNote);
-    //         $("#float-note-dcu").fadeOut(300);
-    //     } else {
-    //         $("#alert-for-float-note-dcu").html(`<i>${'*Keterangan wajib diisi!'}</i>`);
-    //         $("#alert-for-float-note-dcu").fadeIn(500);
-    //         setTimeout(function() {
-    //             $("#alert-for-float-note-dcu").fadeOut(1000);
-    //         }, 2000);
-    //     }
+        // function hideWhenLoading() {
+        getDate();
         
-    //     // alert($("#form-select-dcu option:selected").attr("aria-label"));
-    // });
 
-    // $("#btn-cancel-float-note").click(function(){
-    //     let valueAriaLabel = $("#form-select-dcu option:selected").attr("aria-label");
-    //     if(valueAriaLabel == "" || valueAriaLabel == undefined) {
-    //         $("#btn-masuk-kerja").attr("disabled", 'true');
-    //         $("#btn-masuk-kerja").removeClass("btn-success");
-    //         $("#btn-masuk-kerja").addClass("btn-secondary");
-    //         $("#form-select-dcu").prop('selectedIndex', 0);
-    //         $("#icon-showing-note-dcu").hide();
-    //     }
-    //     // alert(valueTextareaFloatNote);
-    //     $("#float-note-dcu").fadeOut(300);
-    //     // alert($("#form-select-dcu option:selected").attr("aria-label"));
-    // });
-
-    // $("#icon-showing-note-dcu").click(function(){
-    //     let valueAriaLabel = $("#form-select-dcu option:selected").attr("aria-label");
-    //     $("#konten-sticky-note").text(valueAriaLabel);
-    //     $("#float-sticky-note").fadeIn(300);
-    // });
-    // $("#click_close_sticky_note").click(function(){
-    //     $("#float-sticky-note").fadeOut(300);
-    // });
-    // ------------------------------------------------------------------------------------------
-     getDate();
+        let value = <?= json_encode($_SESSION['id']); ?>;
+        // array_unique(value);
+        console.log(value);
+        // console.log('idnya : '+ id);
+        value.forEach(function(id) {
+            setInterval(async () => {
+                
+                await checkTime(id);
+                $(document).ready(function() {
+                    $(`#btn-masuk-kerja${id}`).show();
+                    $(`#btn-lembur-kerja${id}`).show();
+                    $(`#btn-pulang-kerja${id}`).show();
+                });
+            }, 5000);
+        });
 
     function fillThisValue(sendInputName, acceptInputName) {
         // console.log($(`#${e}`).val());
@@ -556,6 +776,7 @@
             let kontenFromFormDcu =  $(`#container-form-dcu${id}`).html();
             $("#floating-form-dcu").html(kontenFromFormDcu);
             $("#floating-form-dcu").fadeIn(500);
+            
             
             
         }
@@ -622,6 +843,7 @@
                 $("#floating-form-dcu").fadeOut(300);
                 // $(`#btn-dcu${$id}`).html("<b>UNFIT</b>");
                 $(`#inputStatusDCU${id}`).val("UNFIT");
+                $(`#btn-pulang-kerja${id}`).hide();
             } else {
                 $("#floating-form-dcu").fadeOut(300);
                 // $(`#btn-dcu${$id}`).html("<b>FIT</b>");
@@ -637,7 +859,34 @@
             let formDCU = document.getElementById(`formDCU${id}`);
             
 
-            formDCU.submit();
+            // update session date
+            let getDayThisDay = $(`#inputDate${id}`).val();
+            // kontol
+            // let getDayThisDay = "2024-07-10";
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+                // 
+                // Send data to Laravel using AJAX
+            jQuery.ajax({
+                url: '{{ route('updateDateSession') }}',
+                type: 'POST',
+                data: { // Add CSRF token
+                    dateThisDay: getDayThisDay,
+                },
+                success: function(response) {
+                    console.log('Data sent successfully:', response);
+                    formDCU.submit();
+                    // location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error sending data:', error);
+                }
+            });
+
+            
         }
 
     // handle action button masuk kerja
@@ -654,47 +903,35 @@
 
             updateClock().then((result) => {
                 jamMasuk = result;
-                $(`#jamMasuk${id}`).html(`<b>${jamMasuk}</b>`);
+                // $(`#jamMasuk${id}`).html(`<b>${jamMasuk}</b>`);
                 $(`#inputJamMasuk${id}`).val(`${jamMasuk}`);
                 $("#container-form-select-dcu").html((`<b>${$("#form-select-dcu").val()}</b>`));
                 // let valueTextareaFloatNote = $("#textarea-float-note").val();
                 // $("#form-select-dcu option:selected").attr("aria-label", valueTextareaFloatNote);
                 $(`#float-note-masuk-kerja${id}`).fadeOut(300);
                 // Check the time every second
-                setInterval(checkTime, 1000);
+                // setInterval(checkTime(id), 1000);
+
+
                 // alert($("#form-select-dcu option:selected").attr("aria-label"));
                 if($(`#textarea-float-note-masuk-kerja${id}`).val() == "") {
                     $(`#icon-showing-note-masuk-kerja${id}`).hide();
                 } else {
+                    $(`#inputKeteranganMasuk${id}`).val($(`#textarea-float-note-masuk-kerja${id}`).val());
                     $(`#icon-showing-note-masuk-kerja${id}`).show();
                 }
 
                 let formTimeSheet = document.getElementById(`formTimesheet${id}`);
                 formTimeSheet.submit(); 
+                $(`#jamMasuk${id}`).html(`<b>${jamMasuk}</b>`);
+
+                
+
+                
             });
 
             
         }
-        // $("#btn-yes-float-note-masuk-kerja").click(function(){
-        //     let jamMasuk;
-
-        //     updateClock().then((result) => {
-        //         jamMasuk = result;
-        //         $("#jamMasuk").html(`<b>${jamMasuk}</b>`);
-        //         $("#container-form-select-dcu").html((`<b>${$("#form-select-dcu").val()}</b>`));
-        //         // let valueTextareaFloatNote = $("#textarea-float-note").val();
-        //         // $("#form-select-dcu option:selected").attr("aria-label", valueTextareaFloatNote);
-        //         $("#float-note-masuk-kerja").fadeOut(300);
-        //         // Check the time every second
-        //         setInterval(checkTime, 1000);
-        //         // alert($("#form-select-dcu option:selected").attr("aria-label"));
-        //         if($("#textarea-float-note-masuk-kerja").val() == "") {
-        //             $("#icon-showing-note-masuk-kerja").hide();
-        //         } else {
-        //             $("#icon-showing-note-masuk-kerja").show();
-        //         }
-        //     });
-        // });
 
         function cancelMasukKerja(id) {
             $(`#float-note-masuk-kerja${id}`).fadeOut(300);
@@ -704,40 +941,33 @@
         // });
 
         function showNoteMasukKerja(id) {
-            let valueTextAreaMasukKerja = $(`#textarea-float-note-masuk-kerja${id}`).val();
+            let valueTextAreaMasukKerja = $(`#keteranganMasuk${id}`).text();
             $(`#konten-sticky-note-masuk-kerja${id}`).text(valueTextAreaMasukKerja);
             $(`#float-sticky-note-masuk-kerja${id}`).fadeIn(300);
         }
 
-
-        // $("#icon-showing-note-masuk-kerja").click(function(){
-        //     let valueTextAreaMasukKerja = $("#textarea-float-note-masuk-kerja").val();
-        //     $("#konten-sticky-note-masuk-kerja").text(valueTextAreaMasukKerja);
-        //     $("#float-sticky-note-masuk-kerja").fadeIn(300);
-        // });
-
         function closeStickyNoteMasukKerja(id) {
             $(`#float-sticky-note-masuk-kerja${id}`).fadeOut(300);
         }
-        // $("#click_close_sticky_note_masuk_kerja").click(function(){
-        //     $("#float-sticky-note-masuk-kerja").fadeOut(300);
-        // });
 
     // handle action button masuk lembur
-        $("#btn-lembur-kerja").click(function(){
-            $("#float-note-lembur-kerja").fadeIn(500);
-        });
+        function startLemburKerja(id) {
+            $(`#float-note-lembur-kerja${id}`).fadeIn(500);
+        }
+        // $("#btn-lembur-kerja").click(function(){
+        //     $("#float-note-lembur-kerja").fadeIn(500);
+        // });
 
-        $("#btn-yes-float-note-lembur-kerja").click(function(){
+        function yesLemburKerja(id) {
             let jamLembur;
             updateClock().then((result) => {
                 jamLembur = result;
-                $("#jamLembur").html(`<b>${jamLembur}</b>`);
-                $("#jamLembur").attr("aria-label", "ambilLembur");
+                // $(`#jamLembur${id}`).attr("aria-label", "ambilLembur");
+                $(`#inputJamLembur${id}`).val(`${jamLembur}`);
                 // $("#container-form-select-dcu").html((`<b>${$("#form-select-dcu").val()}</b>`));
                 // let valueTextareaFloatNote = $("#textarea-float-note").val();
                 // $("#form-select-dcu option:selected").attr("aria-label", valueTextareaFloatNote);
-                $("#float-note-lembur-kerja").fadeOut(300);
+                $(`#float-note-lembur-kerja${id}`).fadeOut(300);
                 // alert($("#form-select-dcu option:selected").attr("aria-label"));
 
                 $("#btn-pulang-kerja").attr("disabled", true);
@@ -745,45 +975,62 @@
                 $("#btn-pulang-kerja").addClass("btn-secondary");
 
                 // to handle show and hide icon showing floating sticky note
-                if($("#textarea-float-note-lembur-kerja").val() == "") {
-                    $("#icon-showing-note-lembur-kerja").hide();
+                if($(`#textarea-float-note-lembur-kerja${id}`).val() == "") {
+                    $(`#icon-showing-note-lembur-kerja${id}`).hide();
                 } else {
-                    $("#icon-showing-note-lembur-kerja").show();
+                    $(`#inputKeteranganLembur${id}`).val($(`#textarea-float-note-lembur-kerja${id}`).val());
+                    $(`#icon-showing-note-lembur-kerja${id}`).show();
                 }
+                
+                let formTimeSheet = document.getElementById(`formTimesheet${id}`);
+                formTimeSheet.submit(); 
+
+                // $(`#jamLembur${id}`).html(`<b>${jamLembur}</b>`);
             });;
+
             
-            
-        })
+        }
 
-        $("#btn-cancel-float-note-lembur-kerja").click(function(){
-            $("#float-note-lembur-kerja").fadeOut(300);
-        });
+        function cancelLemburKerja(id) {
+            $(`#float-note-lembur-kerja${id}`).fadeOut(300);
+        }
 
-        $("#icon-showing-note-lembur-kerja").click(function(){
-            let valueTextArealemburKerja = $("#textarea-float-note-lembur-kerja").val();
-            $("#konten-sticky-note-lembur-kerja").text(valueTextArealemburKerja);
-            $("#float-sticky-note-lembur-kerja").fadeIn(300);
-        });
 
-        $("#click_close_sticky_note_lembur_kerja").click(function(){
-            $("#float-sticky-note-lembur-kerja").fadeOut(300);
-        });
+        function showNoteLemburKerja(id) {
+            let valueTextArealemburKerja = $(`#keteranganLembur${id}`).text();
+            $(`#konten-sticky-note-lembur-kerja${id}`).text(valueTextArealemburKerja);
+            $(`#float-sticky-note-lembur-kerja${id}`).fadeIn(300);
+        }
+
+        function closeStickyNoteLemburKerja(id) {
+            $(`#float-sticky-note-lembur-kerja${id}`).fadeOut(300);
+        }
 
     // handle action button pulang kerja
 
-        $("#btn-pulang-kerja").click(function(){
-            $("#float-note-pulang-kerja").fadeIn(500);
-        });
+        function startPulangKerja(id) {
+            $(`#float-note-pulang-kerja${id}`).fadeIn(500);
+        }
 
-        $("#btn-yes-float-note-pulang-kerja").click(function(){
+        function yesPulangKerja(id) {
             let jamPulang;
             updateClock().then((result) => {
                 jamPulang = result;
-                $("#jamPulang").html(`<b>${jamPulang}</b>`);
+                $(`#jamPulang${id}`).html(`<b>${jamPulang}</b>`);
 
-                let getAriaLabelJamLembur = $("#jamLembur").attr("aria-label");
+                
+                // $(`#textJamPulang${id}`).text(`<b>${jamPulang}</b>`);
+               
+
+                // $(`#textJamPulang${id}`).text(`<b>${jamPulang}</b>`);
+                
+
+                $(`#inputJamPulang${id}`).val(`${jamPulang}`);
+
+                let getAriaLabelJamLembur = $(`#keteranganLembur${id}`).attr("aria-label");
 
                 if(getAriaLabelJamLembur === "ambilLembur") {
+                    // alert();
                     // Function to parse a time string in the format "HH:MM"
                     function parseTime(timeStr) {
                         let parts = timeStr.split(':');
@@ -822,42 +1069,58 @@
                     }
 
                     // Example usage
-                    let getJamLembur = $("#jamLembur").text();
-                    let getJamPulang = $("#jamPulang").text();
+                    let getJamLembur = $(`#jamLembur${id}`).text();
+                    let getJamPulang = $(`#jamPulang${id}`).text();
+                    // let getJamPulang = $(`#textJamPulang${id}`).text();
+                    // alert(`jam lembur : ${getJamLembur}`);
+                    // alert(`jam pulang : ${getJamPulang}`);
 
                     let diff = calculateTimeDifference(getJamLembur, getJamPulang);
+                    let totalWaktuLembur = `${diff.hours} Jam ${diff.minutes} Menit`;
 
                     // alert(`Time difference: ${diff.hours} hours, ${diff.minutes} minutes, ${diff.seconds} seconds`);
-                    $("#totalWaktuLembur").text(`${diff.hours} Jam ${diff.minutes} Menit`);
+                    $(`#totalWaktuLembur${id}`).text(totalWaktuLembur);
+
+                    $(`#inputTotalWaktuLembur${id}`).val(totalWaktuLembur);
+
+                    // console.log(totalWaktuLembur);exit();
                 } else {
-                    $("#jamLembur").html('-');
-                    $("#totalWaktuLembur").text('-');
+                    $(`#jamLembur${id}`).html('-');
+                    $(`#totalWaktuLembur${id}`).text('-');
+                    // alert();
                 }
+
+                // to handle show and hide icon showing floating sticky note
+                if($(`#textarea-float-note-pulang-kerja${id}`).val() == "") {
+                    $(`#icon-showing-note-pulang-kerja${id}`).hide();
+                } else {
+                    $(`#inputKeteranganPulang${id}`).val($(`#textarea-float-note-pulang-kerja${id}`).val());
+                    $(`#icon-showing-note-pulang-kerja${id}`).show();
+                }
+
+                $(`#float-note-pulang-kerja${id}`).fadeOut(300);
+
+                let formTimeSheet = document.getElementById(`formTimesheet${id}`);
+                formTimeSheet.submit(); 
             });
 
-            // to handle show and hide icon showing floating sticky note
-            if($("#textarea-float-note-pulang-kerja").val() == "") {
-                $("#icon-showing-note-pulang-kerja").hide();
-            } else {
-                $("#icon-showing-note-pulang-kerja").show();
-            }
+            
+        }
 
-            $("#float-note-pulang-kerja").fadeOut(300);
-        })
 
-        $("#btn-cancel-float-note-pulang-kerja").click(function(){
-            $("#float-note-pulang-kerja").fadeOut(300);
-        });
+        function cancelPulangKerja(id) {
+            $(`#float-note-pulang-kerja${id}`).fadeOut(300);
+        }
 
-        $("#icon-showing-note-pulang-kerja").click(function(){
-            let valueTextAreapulangKerja = $("#textarea-float-note-pulang-kerja").val();
-            $("#konten-sticky-note-pulang-kerja").text(valueTextAreapulangKerja);
-            $("#float-sticky-note-pulang-kerja").fadeIn(300);
-        });
+        function showNotePulangKerja(id) {
+            let valueTextAreapulangKerja = $(`#keteranganPulang${id}`).text();
+            $(`#konten-sticky-note-pulang-kerja${id}`).text(valueTextAreapulangKerja);
+            $(`#float-sticky-note-pulang-kerja${id}`).fadeIn(300);
+        }
 
-        $("#click_close_sticky_note_pulang_kerja").click(function(){
-            $("#float-sticky-note-pulang-kerja").fadeOut(300);
-        });
+        function closeStickyNotePulangKerja(id) {
+            $(`#float-sticky-note-pulang-kerja${id}`).fadeOut(300);
+        }
 
 
 
@@ -882,6 +1145,32 @@
                 // $("#inputDate").val("2024-07-01");
                 $(".inputDate").val(formattedDate);
 
+                // hapus aja
+                // send ajax to create new session hari
+                // $.ajaxSetup({
+                //     headers: {
+                //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                //     }
+                // });
+                // //
+                //     // Send data to Laravel using AJAX
+                // jQuery.ajax({
+                //     url: '{{ route('handleSession') }}',
+                //     type: 'POST',
+                //     data: { // Add CSRF token
+                //         dateThisDay: "Seninnn" ,
+                //         dateThisDay: 
+                //     },
+
+                //     success: function(response) {
+                //         console.log('Data sent successfully tai:', response);
+                //     },
+                //     error: function(xhr, status, error) {
+                //         console.error('Error sending data tai:', error);
+                //     }
+                // });
+                
+
                 
                 return formattedTime;
             }
@@ -891,6 +1180,12 @@
         //    alert("Error, mungkin koneksi internet anda kurang bagus. Silahkan refresh");
 
             console.log( "<i>Error, Silahkan refresh</i>");
+
+            // $('#myTable').hide();
+            // window.stop();
+            // if(confirm('Jaringan Koneksi Internet Anda Kurang Baik, silahkan refresh...')) {
+                // window.location.reload();
+            // }
         } 
     }
 
@@ -911,23 +1206,39 @@
             return formattedTime;
 
         } catch (error) {
-            console.error('Error fetching the online time:', error);
-            document.getElementById('currentTime').textContent = 'Failed to fetch current time.';
+            // console.error('Error fetching the online time:', error);
+            // document.getElementById('currentTime').textContent = 'Failed to fetch current time.';
 
-            return "<i>Error, Silahkan refresh</i>";
+            // $('#myTable').hide();
+            // window.stop();
+            // if(confirm('Jaringan Koneksi Internet Anda Kurang Baik, silahkan refresh...')) {
+                // window.location.reload();
+            // }
+            // return "<i>Error, Silahkan refresh</i>";
         }
         
     }
 
-    async function checkTime() {
+    async function checkTime(id) {
         let hours;
         let minutes;
         let seconds;
+
+        
         
         try {
             // Fetch the current time from the World Time API
             let response = await fetch('https://worldtimeapi.org/api/ip');
+
+            // if(!response.ok) {
+            //     $('body').hide();
+            // } else {
+            //     $('body').show();
+            //     // exit();
+            // }
             let data = await response.json();
+
+            
 
             // Extract the current datetime from the response
             let currentTime = new Date(data.datetime);
@@ -935,69 +1246,377 @@
             minutes = currentTime.getMinutes();
             seconds = currentTime.getSeconds();
             // const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+            
+       
+        
+
+            // if((hours >= 8 && hours <= 8) && minutes <= 30) {
+            //     $(`#btn-dcu${id}`).show();
+            // }
+
+            // kontol
+            let getDayThisDay = $(`#inputDate${id}`).val();
+            // let getDayThisDay = "2024-07-13";
+            // alert(getDayThisDay);
+
+            if((hours >= 8 && hours <= 8) && minutes <= 30) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                // 
+                    // Send data to Laravel using AJAX
+                jQuery.ajax({
+                    url: '{{ route('handleSession') }}',
+                    type: 'POST',
+                    data: { // Add CSRF token
+                        isHiddenBtnDCU: 'false' ,
+                        dateThisDay: getDayThisDay,
+                    },
+                    success: function(response) {
+                        // console.log('Data sent successfully:', response);
+                        if($('#resetTimesheet').attr('aria-label') != response.resetTimesheet) {
+                            window.location.reload();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error sending data:', error);
+                    }
+                });
+
+            } else {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                // 
+                    // Send data to Laravel using AJAX
+                jQuery.ajax({
+                    url: '{{ route('handleSession') }}',
+                    type: 'POST',
+                    data: { // Add CSRF token
+                        // isHiddenBtnDCU: 'true' ,//ini aktifin lagi, ini yg bener
+                        isHiddenBtnDCU: 'false' ,
+                        dateThisDay: getDayThisDay, 
+                    },
+
+                    success: function(response) {
+                        // console.log('Data sent successfully:', response);
+                        if($('#resetTimesheet').attr('aria-label') != response.resetTimesheet) {
+                            window.location.reload();
+                        }
+                        // console.log('kirik'+response.resetTimesheet);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error sending data:', error);
+
+
+                    }
+                });
+
+            }
+            
+
+            // Check if the time is exactly 5:00:00 PM
+            // console.log($(`#textJamMasuk${id}`).text());
+            let timeStringJamMasuk = $(`#textJamMasuk${id}`).text();
+            let getHourJamMasuk = timeStringJamMasuk.split(':')[0];
+            // alert(getHourJamMasuk);
+            // console.log(getHourJamMasuk);
+            if(getHourJamMasuk != "") {
+                // if (hours >= getHourJamMasuk && hours < 17) {
+                if (false) {
+                    // $(`#btn-dcu${id}`).show();
+                    // enableBtnLemburAndBtnPulang();
+                    disableBtnLemburAndBtnPulang(id);
+                    // console.log($(`#jamLembur${id}`).text());
+                    // console.log($("#jamLembur").attr("aria-label"));
+
+                    // console.log("button lembur dan pulang jalan");
+                    // alert("dobol");
+                } else {
+                    let getAriaLabelJamLembur = $(`#keteranganLembur${id}`).attr("aria-label");
+                    // alert(`${getAriaLabelJamLembur}${id}`);
+
+                    
+                    // enableBtnLemburAndBtnPulang();
+                
+                    // if (true) {
+                    //     enableBtnLemburAndBtnPulang(id);
+                    //     // alert("enable button lembur dan pulang oke..");
+                    // } 
+                    
+
+                    if(getAriaLabelJamLembur === "ambilLembur") {
+                        console.log(`ambilLembur ceunah si id : ${id}`);
+                        console.log("===================================");
+                        // Calculate the future time (1 hour from time lembur)
+                        // Time string (clock only)
+                        // const timeString = $(`#jamLembur${id}`).text();
+                        const timeString = $(`#textJamLembur${id}`).text();
+                        console.log(timeString.replace(/\s/g, ""));
+                        const currentDate = new Date();
+
+                        // Extract the date components (year, month, day)
+                        const year = currentDate.getFullYear();
+                        const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so add 1
+                        const day = String(currentDate.getDate()).padStart(2, '0');
+
+                        // Combine the date components with the time string
+                        const dateTimeString = `${year}-${month}-${day}T${timeString}`;
+                        let date = new Date(dateTimeString);
+                        date = date.getTime() + 1 * 60 * 60 * 1000;
+                        const hoursUTC = Math.floor((date / (1000 * 60 * 60)) % 24);
+
+                        // Convert milliseconds to hours in local time
+                        const dateFromMilliseconds = new Date(date);
+                        const hoursLocal = dateFromMilliseconds.getHours();
+                        const minutesLocal = dateFromMilliseconds.getMinutes();
+                        const secondsLocal = dateFromMilliseconds.getSeconds();
+
+                        // console.log(`hours local setelah lembur skrng : ${hoursLocal} : ${minutesLocal} : ${secondsLocal}`);
+
+                        // $(`#btn-pulang-kerja${id}`).attr("disabled", true);
+                        // $(`#btn-pulang-kerja${id}`).removeClass("btn-success");
+                        // $(`#btn-pulang-kerja${id}`).addClass("btn-secondary");
+                        
+                        if (hours >= hoursLocal) {
+                            if(minutes >= minutesLocal) {
+                                console.log('minutes local : ' + minutesLocal);
+                                if(seconds >= secondsLocal) {
+                                    enableBtnPulang(id);
+
+                                    // if(hours >= 22 && minute)
+                                } 
+                            } else {
+                                disableBtnPulang(id);
+                            }
+
+                            if(hours >= 2) {
+                                const timeFormat = /\b([01]\d|2[0-3]):([0-5]\d):([0-5]\d)\b/g;
+                                let getJamPulang = ($(`#jamPulang${id}`).text()).match(timeFormat);
+                                // let getJamPulang = ($(`#textJamPulang${id}`).text()).match(timeFormat);
+                                // console.log(`jam pulang tai : ${getJamPulang}`);
+
+                                let getAriaBtnPulang =  $(`#btn-pulang-kerja${id}`).attr('aria-label');
+                                console.log('isi pulang ' + getAriaBtnPulang);
+                                if(getAriaBtnPulang == 'true') {
+                                    // alert("sekali doang babik");
+                                    let btnYesJamPulang = document.getElementById(`btn-yes-float-note-pulang-kerja${id}`);
+                                    
+                                    $.ajaxSetup({
+                                        headers: {
+                                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                        }
+                                    });
+                                    // 
+                                        // Send data to Laravel using AJAX
+                                    jQuery.ajax({
+                                        url: `/updatePulangSession/${id}`,
+                                        type: 'POST',
+                                        data: { // Add CSRF token
+                                            // isHiddenBtnDCU: 'true' ,
+                                            isPulang: 'false',
+                                        },
+
+                                        success: function(response) {
+                                            console.log('Data sent pulang successfully:', response);
+                                            console.log('kirik');
+                                            btnYesJamPulang.click();
+                                        },
+                                        error: function(xhr, status, error) {
+                                            console.error('Error sending data pulang:', error);
+                                        }
+                                    });
+                                }
+                            }
+                            // alert("berhasil");
+                        } else {
+                            // disableBtnPulang(id);
+                            // debug
+                            enableBtnPulang(id);
+                            // end debug
+                        }
+                        // if (true) {
+                        //     enableBtnPulang(id);
+                        // } else {
+                        //     disableBtnPulang(id);
+                        // }
+                        // if (true) {
+                        //     enableBtnPulang();
+                        // } 
+                    } else {
+                        enableBtnLemburAndBtnPulang(id);
+                        //set session bahwa nilai session pulang nya true
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
+                        
+                            // Send data to Laravel using AJAX
+                        jQuery.ajax({
+                            url: `/updatePulangSession/${id}`,
+                            type: 'POST',
+                            data: { // Add CSRF token
+                                // isHiddenBtnDCU: 'true' ,
+                                isPulang: 'true',
+                            },
+
+                            success: function(response) {
+                                console.log('Data sent pulang successfully:', response);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error sending data pulang:', error);
+                            }
+                        });
+                    }
+                }
+            } else {
+                
+                disableBtnLemburAndBtnPulang(id);
+            }
+
+            // throw new Error("Something went wrong");
+            
         } catch (error) {
             console.error('Error fetching the online time:', error);
-            alert('Failed to fetch current time.');
+            // window.location.reload();
+            // $('document').hide();
+            // window.stop();
+            // window.addEventListener('beforeunload', function (e) {
+            //     e.preventDefault();
+            //     e.returnValue = '';
+            // });
+            
+            setInterval(() => {
+                $('#myTable').hide();
+            }, 5000);
+            
+           
+            if(confirm('Jaringan Koneksi Internet Anda Kurang Baik, silahkan refresh...')) {
+                window.location.reload();
+            } else {
+                $('#myTable').hide();
+            }
+            // console.log('Failed to fetch current time.');
         }
 
-        // Check if the time is exactly 5:00:00 PM
-        if (hours >= 17 && minutes >= 1 && seconds === 0) {
-            enableBtnLemburAndBtnPulang();
-        } 
-
-        let getAriaLabelJamLembur = $("#jamLembur").attr("aria-label");
-
-        if(getAriaLabelJamLembur === "ambilLembur") {
-            // Calculate the future time (1 hour from time lembur)
-            // Time string (clock only)
-            const timeString = $("#jamLembur").text();
-            const currentDate = new Date();
-
-            // Extract the date components (year, month, day)
-            const year = currentDate.getFullYear();
-            const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so add 1
-            const day = String(currentDate.getDate()).padStart(2, '0');
-
-            // Combine the date components with the time string
-            const dateTimeString = `${year}-${month}-${day}T${timeString}`;
-            let date = new Date(dateTimeString);
-            date = date.getTime() + 1 * 60 * 60 * 1000;
-            const hoursUTC = Math.floor((date / (1000 * 60 * 60)) % 24);
-
-            // Convert milliseconds to hours in local time
-            const dateFromMilliseconds = new Date(date);
-            const hoursLocal = dateFromMilliseconds.getHours();
-            const minutesLocal = dateFromMilliseconds.getHours();
-            const secondsLocal = dateFromMilliseconds.getHours();
-
-            $("#btn-pulang-kerja").attr("disabled", true);
-            $("#btn-pulang-kerja").removeClass("btn-success");
-            $("#btn-pulang-kerja").addClass("btn-secondary");
-
-            if (hours >= hoursLocal && minutes >= minutesLocal && seconds === secondsLocal) {
-                enableBtnPulang();
-            } 
-            // if (true) {
-            //     enableBtnPulang();
-            // } 
-        }
     }
 
-    function enableBtnLemburAndBtnPulang() {
-        $("#btn-lembur-kerja").removeAttr("disabled");
-        $("#btn-lembur-kerja").removeClass("btn-secondary");
-        $("#btn-lembur-kerja").addClass("btn-success");
-        $("#btn-pulang-kerja").removeAttr("disabled");
-        $("#btn-pulang-kerja").removeClass("btn-secondary");
-        $("#btn-pulang-kerja").addClass("btn-success");
+    // function hideBtnDCU(id) {
+    //     $(`#btn-dcu${id}`).hide();
+    // }
+
+    function disableBtnLemburAndBtnPulang(id) {
+        // alert("kirik");
+        
+        $(`#btn-lembur-kerja${id}`).attr("disabled", true);
+        $(`#btn-lembur-kerja${id}`).addClass("btn-secondary");
+        $(`#btn-lembur-kerja${id}`).removeClass("btn-success");
+
+        $(`#btn-pulang-kerja${id}`).attr("disabled", true);
+        $(`#btn-pulang-kerja${id}`).addClass("btn-secondary");
+        $(`#btn-pulang-kerja${id}`).removeClass("btn-success");
     }
 
-    function enableBtnPulang() {
+    function enableBtnLemburAndBtnPulang(id) {
+        // alert("kirik");
+        
+        $(`#btn-lembur-kerja${id}`).removeAttr("disabled");
+        $(`#btn-lembur-kerja${id}`).removeClass("btn-secondary");
+        $(`#btn-lembur-kerja${id}`).addClass("btn-success");
+        $(`#btn-pulang-kerja${id}`).removeAttr("disabled");
+        $(`#btn-pulang-kerja${id}`).removeClass("btn-secondary");
+        $(`#btn-pulang-kerja${id}`).addClass("btn-success");
+    }
+
+    function disableBtnPulang(id) {
         // alert("boleh pualng");
-        $("#btn-pulang-kerja").removeAttr("disabled");
-        $("#btn-pulang-kerja").removeClass("btn-secondary");
-        $("#btn-pulang-kerja").addClass("btn-success");
+        $(`#btn-pulang-kerja${id}`).attr("disabled", true);
+        $(`#btn-pulang-kerja${id}`).removeClass("btn-success");
+        $(`#btn-pulang-kerja${id}`).addClass("btn-secondary");
     }
+
+    function enableBtnPulang(id) {
+        // alert("boleh pualng");
+        $(`#btn-pulang-kerja${id}`).removeAttr("disabled");
+        $(`#btn-pulang-kerja${id}`).removeClass("btn-secondary");
+        $(`#btn-pulang-kerja${id}`).addClass("btn-success");
+    }
+
+    function aksiHapus(id, dcurecap_id) {
+
+        $(`#formTimesheet${id}`).attr('action', `/dashboard/destroyDcuTimesheet/${dcurecap_id}`);
+
+        $(`#formTimesheet${id}`).submit();
+    }
+
+    function aksiEdit(id) {
+        // alert(id);
+        $(`#btnAksi${id}`).hide();
+        $(`#aksiChildEdit${id}`).show();
+        $(`#ubahStatusDCU${id}`).show();
+        $(`#textJamMasuk${id}`).hide();
+        $(`#ubahJamMasuk${id}`).show();
+        $(`#textJamLembur${id}`).hide();
+        $(`#ubahJamLembur${id}`).show();
+        $(`#textJamPulang${id}`).hide();
+        $(`#ubahJamPulang${id}`).show();
+    }
+
+    function batalAksiEdit(id) {
+        // alert();
+        $(`#btnAksi${id}`).show();
+        $(`#aksiChildEdit${id}`).hide();
+        $(`#ubahStatusDCU${id}`).hide();
+        $(`#textJamMasuk${id}`).show();
+        $(`#ubahJamMasuk${id}`).hide();
+        $(`#textJamLembur${id}`).show();
+        $(`#ubahJamLembur${id}`).hide();
+        $(`#textJamPulang${id}`).show();
+        $(`#ubahJamPulang${id}`).hide();
+        
+        $(`#formDCU${id}`).attr('action', `/dashboard/storeDCU/${id}`);
+        $(`#formTimesheet${id}`).attr('action', `/dashboard/storeTimesheet/${id}/${dcurecap_id}`);
+
+    }
+
+    function simpanAksiEdit(id, dcurecap_id) {
+
+        $(`#formTimesheet${id}`).attr('action', `/dashboard/updateTimesheet/${id}/${dcurecap_id}`);
+
+        $(`#formTimesheet${id}`).submit();
+    }
+
+    function ubahStatusDCU(id) {
+        // alert(id);
+        $(`#formDCU${id}`).attr('action', `/dashboard/updateDCU/${id}`);
+
+        activeFloatFormDcu(id);
+    }
+
+    function ubahJamMasuk(id) {
+        // alert(id);
+        let ubahJamMasuk = $(`#ubahJamMasuk${id}`).val();
+        $(`#inputUbahJamMasuk${id}`).val(`${ubahJamMasuk}:00`);
+    }
+
+    function ubahJamLembur(id) {
+        // alert(id);
+        let ubahJamLembur = $(`#ubahJamLembur${id}`).val();
+        $(`#inputUbahJamLembur${id}`).val(`${ubahJamLembur}:00`);
+    }
+
+    function ubahJamPulang(id) {
+        // alert(id);
+        let ubahJamPulang = $(`#ubahJamPulang${id}`).val();
+        $(`#inputUbahJamPulang${id}`).val(`${ubahJamPulang}:00`);
+    }
+    
 </script>
 
 
@@ -1045,6 +1664,10 @@
   @elseif(session()->has('error'))
 
       toastr.error('{{ session('error') }}', 'GAGAL!'); 
+
+  @elseif(session()->has('info'))
+
+      toastr.info('{{ session('info') }}', 'Info!'); 
       
   @endif
 </script>

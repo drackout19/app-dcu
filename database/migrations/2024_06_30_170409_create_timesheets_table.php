@@ -14,10 +14,14 @@ return new class extends Migration
         Schema::create('timesheets', function (Blueprint $table) {
             $table->id();
             $table->foreignId("dcurecap_id");
+            $table->foreignId("salary_id");
             $table->string("jamMasuk");
             $table->string("jamLembur")->nullable();
             $table->string("jamPulang")->nullable();
             $table->string("totalWaktuLembur")->nullable();
+            $table->string("keterangan_masuk")->nullable();
+            $table->string("keterangan_lembur")->nullable();
+            $table->string("keterangan_pulang")->nullable();
             $table->timestamps();
         });
     }

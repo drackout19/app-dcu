@@ -14,7 +14,7 @@
                     </label>
                     <select class="form-select mt-2" aria-label="Default select example" id="inputJabatan" required
                         name="inputJabatan">
-                        <option hidden value="">Open this select menu</option>
+                        <option hidden value="">Pilih Jabatan</option>
                         <option value="Supervisor">Supervisor</option>
                         <option value="Project Coordinator">Project Coordinator</option>
                         <option value="Safetyman">Safetyman</option>
@@ -50,12 +50,93 @@
                     </label>
                     <input type="number" class="form-control" id="inputNoktp" name="inputNoktp">
                 </div>
+                {{-- input jenis kelamin --}}
+                <div class="mb-3">
+                    <label class="" for="inputJenisKelamin" class="form-label">
+                        <h6 class="mb-0">Jenis Kelamin</h6>
+                    </label>
+                    {{-- dropdown jenis kelamin --}}
+                    <select class="form-select mt-2 mb-2" aria-label="Default select example" id="inputJenisKelamin" required
+                        name="inputJenisKelamin">
+                        <option hidden value="">Pilih Jenis Kelamin</option>
+                        <option value="Pria">Pria</option>
+                        <option value="Wanita">Wanita</option>
+                    </select>
+                </div>
+                {{-- input umur --}}
+                <div class="mb-3">
+                    <label for="inputUmur" class="form-label">
+                        <h6 class="mb-0">Umur</h6>
+                    </label>
+                    <input type="number" class="form-control" id="inputUmur" name="inputUmur">
+                </div>
+                {{-- input status karyawan --}}
+                <div class="mb-3">
+                    <label class="" for="inputStatusPekerja" class="form-label">
+                        <h6 class="mb-0">Status Pekerja</h6>
+                    </label>
+                    {{-- dropdown status karyawan --}}
+                    <select class="form-select mt-2 mb-2" aria-label="Default select example" id="inputStatusPekerja" required
+                        name="inputStatusPekerja">
+                        <option hidden value="">Pilih Status Pekerja</option>
+                        <option value="Tetap">Tetap</option>
+                        <option value="Lepas">Lepas</option>
+                    </select>
+                </div>
+                {{-- input gaji pokok --}}
+                <div class="mb-3" id="divGajiPokok" style="display: none">
+                    <label for="inputGajiPokok" class="form-label">
+                        <h6 class="mb-0">Gaji Pokok</h6>
+                    </label>
+                    <input type="number" class="form-control" id="inputGajiPokok" name="inputGajiPokok">
+                </div>
+                {{-- input gaji harian --}}
+                <div class="mb-3"  id="divGajiHarian" style="display: none">
+                    <label for="inputGajiHarian" class="form-label">
+                        <h6 class="mb-0">Gaji Harian</h6>
+                    </label>
+                    <input type="number" class="form-control" id="inputGajiHarian" name="inputGajiHarian">
+                </div>
+                {{-- input gaji lembur --}}
+                <div class="mb-3"  id="divGajiLembur" style="display: none">
+                    <label for="inputGajiLembur" class="form-label">
+                        <h6 class="mb-0">Gaji Lembur</h6>
+                    </label>
+                    <input type="number" class="form-control" id="inputGajiLembur" name="inputGajiLembur">
+                </div>
+                {{-- input no rekening bank --}}
+                <div class="mb-3">
+                    <label class="" for="inputNamaBank" class="form-label">
+                        <h6 class="mb-0">No Rekening</h6>
+                    </label>
+                    {{-- dropdown nama bank --}}
+                    <div class="mt-2 mb-2" id="divSelectNamaBank">
+                        <select class="form-select" aria-label="Default select example" id="inputNamaBank"
+                            name="inputNamaBank">
+                            <option hidden value="">Pilih Nama Bank</option>
+                            <option value="BCA">BCA</option>
+                            <option value="MANDIRI">MANDIRI</option>
+                            <option value="BNI">BNI</option>
+                            <option value="BRI">BRI</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+
+                    <input type="number" class="form-control" id="inputNoRekening" name="inputNoRekening" placeholder="No rekening">
+                </div>
                 {{-- input foto ktp --}}
                 <div class="mb-3">
                     <label for="inputFotoktp" class="form-label">
                         <h6 class="mb-0">Foto KTP</h6>
                     </label>
                     <input type="file" class="form-control" id="inputFotoktp" name="inputFotoktp" value="hfdfd">
+                </div>
+                {{-- input foto Diri --}}
+                <div class="mb-3">
+                    <label for="inputFotoDiri" class="form-label">
+                        <h6 class="mb-0">Foto Diri</h6>
+                    </label>
+                    <input type="file" class="form-control" id="inputFotoDiri" name="inputFotoDiri" value="hfdfd">
                 </div>
                 {{-- input file mcu --}}
                 <div class="mb-3">
@@ -70,6 +151,13 @@
                         <h6 class="mb-0">Kartu Induction</h6>
                     </label>
                     <input type="file" class="form-control" id="inputKartuInduction" name="inputKartuInduction">
+                </div>
+                {{-- input no kartu badge --}}
+                <div class="mb-3">
+                    <label for="inputNoBadge" class="form-label">
+                        <h6 class="mb-0">No Kartu Badge</h6>
+                    </label>
+                    <input type="number" class="form-control" id="inputNoBadge" name="inputNoBadge">
                 </div>
                 {{-- input kartu badge --}}
                 <div class="mb-3">
@@ -145,4 +233,51 @@
             </form>
         </div>
     </div>
+@endsection
+
+@section('script')
+
+    <script>
+        $("#inputNoRekening").keyup(function() {
+            let inputNoRek = $("#inputNoRekening").val();
+
+            if(inputNoRek != "") {
+                $("#inputNamaBank").attr("required", true);
+            } else {
+                $("#inputNamaBank").removeAttr("required");
+            }
+        });
+
+        $("#inputNamaBank").change(function() {
+            let inputNamaBank = $("#inputNamaBank").val();
+
+            if(inputNamaBank == "Lainnya") {
+                $("#divSelectNamaBank").html('<input type="text" class="form-control" id="inputNamaBank" name="inputNamaBank" placeholder="Nama Bank">')
+                // alert();
+            }
+
+            $("#inputNoRekening").attr("required", true);
+        });
+
+        $("#inputStatusPekerja").change(function() {
+            let inputStatusPekerja = $("#inputStatusPekerja").val();
+
+            if(inputStatusPekerja == "Tetap") {
+                $("#divGajiPokok").show();
+                $("#divGajiPokok").attr('required', true);
+                $("#divGajiHarian").hide();
+                $("#divGajiHarian").removeAttr('required');
+                $("#divGajiLembur").hide();
+                $("#divGajiLembur").removeAttr('required');
+            } else {
+                $("#divGajiPokok").hide();
+                $("#divGajiPokok").removeAttr('required');
+                $("#divGajiHarian").show();
+                $("#divGajiHarian").attr('required', true);
+                $("#divGajiLembur").show();
+                $("#divGajiLembur").attr('required', true);;
+            }
+        });
+        
+    </script>
 @endsection

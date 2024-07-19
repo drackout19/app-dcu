@@ -101,122 +101,236 @@
           <h5>Rekap DCU</h5>
       </div>
 
-      <div class="rounded bg-white mt-5 p-3" style="height: 70vh; overflow-x: scroll">
+      <div class="rounded bg-white mt-5 p-3" style="height: 90vh; overflow-x: scroll">
       {{-- title --}}
-      <h4 class="fw-bolder">Rekap Daily Check Up Pekerja🏥</h4>
-      <br>
+      <h4 class="fw-bolder text-center mb-5">Rekap Absensi Pekerja🏥</h4>
+      {{-- <br><br> --}}
       {{-- date picker  --}}
-      <form class="mb-4">
-          <label for="datePickerRekapDcu">Tanggal:</label>
-          <input type="date" id="datePickerRekapDcu" name="datePickerRekapDcu">
-      </form>
-      <span class="btn btn-sm btn-success mb-2" id="btnExportPdf">Export This Table to Pdf</span>
-      
-      <button class="btn btn-sm btn-success" id="btnExportPdfOnlyMoon" style="display: flex; align-items: center">
-        <span class="me-1">Export All Table to PDF only in</span> 
-        <form class="ms-1 p-0">
-          <div class="p-0" style="background: white; display: flex; align-items: center">
-              <input type="text" id="month-year-picker" name="month-year-picker" style="border: none; width: 110px;">
-              <label class="text-black p-0" for="month-year-picker"><span class="material-symbols-outlined">
-                keyboard_arrow_down
-                </span></label>
-          </div>
+      <div class="bg-primary rounded p-1 mb-2 text-white" style="width: max-content">
+        <form class="" action="{{ route('dcu-recap.store') }}" id="formDate" method="post">
+            @csrf
+            <span class="mb-2" style="display: flex"><span class="material-symbols-outlined">sort</span>Sort By</span>
+            <label for="inputDatePickerRekapDcu"> Tanggal:</label>
+            <input type="date" id="inputDatePickerRekapDcu" name="inputDatePickerRekapDcu" value="{{ (isset($date)) ? $date : '' }}">
         </form>
-      </button>
+      </div>
+      
+      <div class="bg-primary rounded p-1 text-white" style="width: max-content">
+        <span class="mb-" style="display: flex"><span class="material-symbols-outlined">sort</span>Sort By</span>
+      
+        {{-- <button class="btn btn-sm btn-success" id="btnExportExcelOnlyMoon" style="display: flex; align-items: center"> --}}
+            {{-- <span class="me-1">Export All Table to .xlxs only in</span> 
+            
+        </button> --}}
+        
+        <div class="p-1" style="display: flex;">
+            <label for="month-year-picker"> Bulan & Tahun:</label>
+            <form class="ms-1 p-0" id="formMonthYear" method="post">
+            @csrf
+                <div class="p-0" style="background: white; display: flex; align-items: center">
+                    <input type="text" id="month-year-picker" name="month-year-picker" style="border: none; width: 110px;" placeholder="Pilih">
+                    <label class="text-black p-0" for="month-year-picker"><span class="material-symbols-outlined">
+                    keyboard_arrow_down
+                    </span></label>
+                </div>
+            </form>
+        </div>
+      </div>
+      <hr>
+      <div style="width: 100%; display: flex;">
+            <div class="btn btn-sm btn-success mt-2 ms-auto d-flex" id="btnExportExcel"><span class="material-symbols-outlined me-1">export_notes</span>Export Table to .xls</div>
+      </div>
       <br>
       {{-- tabel --}}
-      <table id="myTable" class="display text-center">
-          <thead>
-              <tr class="text-center">
-                  <th class="text-center">No</th>
-                  <th class="text-center">Tanggal</th>
-                  <th class="text-center">Id Badge</th>
-                  <th class="text-center">Jabatan</th>
-                  <th class="text-center">Nama</th>
-                  <th class="text-center">Status DCU</th>
-                  <th class="text-center">Suhu Badan</th>
-                  <th class="text-center">Kadar Oksigen Darah</th>
-                  <th class="text-center">Detak Jantung</th>
-                  <th class="text-center">Tekanan Darah</th>
-                  {{-- <th class="text-center">Opsi</th> --}}
-              </tr>
-          </thead>
-          <tbody >
+    <div id="dataTableRekapDcu">
+        <table id="myTable" class="display text-center">
+            <thead>
+                <tr class="text-center">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Tanggal</th>
+                    <th class="text-center">Id Badge</th>
+                    <th class="text-center">Jabatan</th>
+                    <th class="text-center">Nama</th>
+                    <th class="text-center">Status DCU</th>
+                    <th class="text-center">Suhu Badan</th>
+                    <th class="text-center">Kadar Oksigen Darah</th>
+                    <th class="text-center">Detak Jantung</th>
+                    <th class="text-center">Tekanan Darah</th>
+                    {{-- <th class="text-center">Opsi</th> --}}
+                </tr>
+            </thead>
+            <tbody >
 
-           
-            @forelse ($dataManpower as $data)
-                @forelse ($data->dcurecap as $dataDCU) 
             
-                    <tr>
-                        <td class="text-center">{{ $loop->iteration }}</td>
-                        <td class="text-center">{{ $dataDCU->tanggal }}</td>
-                        <td class="text-center">27501</td>
-                        <td class="text-start">{{ $data->jabatan }}</td>
-                        <td class="text-start">{{ $data->nama_pekerja }}</td>
-                        <td class="text-center fw-bolder">FIT </td>
-                        <td class="text-center fw-bolder">{{ $dataDCU->suhu_badan }}</td>
-                        <td class="text-center fw-bolder">{{ $dataDCU->kadar_oksigen }}</td>
-                        <td class="text-center fw-bolder">{{ $dataDCU->detak_jantung }}</td>
-                        <td class="text-center fw-bolder">{{ $dataDCU->tekanan_darah }}</td>
-                        {{-- <td class="text-center" style="cursor: default"><span class="text-danger">Hapus</span> | <span class="text-warning">Edit</span></td> --}}
-                    </tr>
+                @forelse ($dataManpower as $data)
+                    @forelse ($data->dcurecap as $dataDCU) 
+                
+                        <tr>
+                            <td class="text-center">{{ $loop->iteration }}</td>
+                            <td class="text-center">{{ $dataDCU->tanggal }}</td>
+                            <td class="text-center">27501</td>
+                            <td class="text-start">{{ $data->jabatan }}</td>
+                            <td class="text-start">{{ $data->nama_pekerja }}</td>
+                            <td class="text-center fw-bolder">{{ $dataDCU->status_dcu }}</td>
+                            <td class="text-center ">
+                                @if (empty($dataDCU->suhu_badan))
+                                    Normal
+                                @else
+                                    <b>{{ $dataDCU->suhu_badan }}<span>&deg;C</span></b>
+                                @endif
+                            </td>
+                            <td class="text-center ">
+                                @if (empty($dataDCU->kadar_oksigen))
+                                    Normal
+                                @else
+                                    <b>{{ $dataDCU->kadar_oksigen }} <span>%</span></b>
+                                @endif
+                            </td>
+                            <td class="text-center ">
+                                @if (empty($dataDCU->detak_jantung))
+                                    Normal
+                                @else
+                                    <b>{{ $dataDCU->detak_jantung }} <span>bpm</span></b>
+                                @endif
+                            </td>
+                            <td class="text-center ">
+                                @if (empty($dataDCU->tekanan_darah))
+                                    Normal
+                                @else
+                                    <b>{{ $dataDCU->tekanan_darah }} <span>mmHg</span></b>
+                                @endif
+                            </td>
+                            {{-- <td class="text-center" style="cursor: default"><span class="text-danger">Hapus</span> | <span class="text-warning">Edit</span></td> --}}
+                        </tr>
+                    @empty
+                
+                    @endforelse
+                    
                 @empty
-            
+                    
                 @endforelse
-                
-            @empty
-                
-            @endforelse
-              <tr>
-                  <td class="text-center">1</td>
-                  <td class="text-center">19 Juni 2024</td>
-                  <td class="text-center">27501</td>
-                  <td class="text-start">Supervisor</td>
-                  <td class="text-start">Micu Turismo</td>
-                  <td class="text-center fw-bolder">FIT </td>
-                  <td class="text-center fw-bolder">Normal</td>
-                  <td class="text-center fw-bolder">Normal</td>
-                  <td class="text-center fw-bolder">Normal</td>
-                  <td class="text-center fw-bolder">Normal</td>
-                  {{-- <td class="text-center" style="cursor: default"><span class="text-danger">Hapus</span> | <span class="text-warning">Edit</span></td> --}}
-              </tr>
-              <tr>
-                  <td class="text-center">2</td>
-                  <td class="text-center">19 Juni 2024</td>
-                  <td class="text-center">27501</td>
-                  <td class="text-start">Projek Koordinator</td>
-                  <td class="text-start">Kicu Freeze</td>
-                  <td class="text-center fw-bolder">UNFIT</td>
-                  <td class="text-center fw-bolder">40<span>&deg;C</span></td>
-                  <td class="text-center fw-bolder">70 <span>%</span></td>
-                  <td class="text-center fw-bolder">90 <span>bpm</span></td>
-                  <td class="text-center fw-bolder">130/90 <span>mmHg</span></td>
-                  {{-- <td class="text-center" style="cursor: default"><span class="text-danger">Hapus</span> | <span class="text-warning">Edit</span></td> --}}
-              </tr>
-          </tbody>
-      </table>
+                {{-- <tr>
+                    <td class="text-center">1</td>
+                    <td class="text-center">19 Juni 2024</td>
+                    <td class="text-center">27501</td>
+                    <td class="text-start">Supervisor</td>
+                    <td class="text-start">Micu Turismo</td>
+                    <td class="text-center fw-bolder">FIT </td>
+                    <td class="text-center">Normal</td>
+                    <td class="text-center">Normal</td>
+                    <td class="text-center">Normal</td>
+                    <td class="text-center">Normal</td>
+                    <td class="text-center" style="cursor: default"><span class="text-danger">Hapus</span> | <span class="text-warning">Edit</span></td>
+                </tr> --}}
+            </tbody>
+        </table>
+    </div>
+
+    {{-- coba sendiri --}}
+    <div id="pdfPreviewContainer" style="display: none;">
+        <iframe id="pdfPreview" style="width: 100%; height: 500px;"></iframe>
+        <button id="downloadPDF">Download PDF</button>
+    </div>
+    {{-- end coba sendiri --}}
 
 
       </div>
 
 @endsection
 
+
 @section('script')
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/TableExport/5.2.0/js/tableexport.min.js"></script> --}}
+
+
+
+<script>
+    $("#inputDatePickerRekapDcu").change(function() {
+        let inputDatePickerRekapDcu = $("#inputDatePickerRekapDcu").val();
+        // alert(inputDatePickerRekapDcu);
+        $("#inputDatePickerRekapDcu").val(inputDatePickerRekapDcu);
+
+        $("#formDate").submit();
+    });
+
+    // $("#month-year-picker").click(function(e) {
+    //     e.preventDefault();
+    // });
+    document.getElementById('month-year-picker').addEventListener("click", function(e) {
+        e.preventDefault();
+    }, true);
+
+    // $("#btnExportExcelOnlyMoon").click(function(e) {
+    $("#month-year-picker").change(function() {
+        // e.preventDefault();
+        $("#inputDatePickerRekapDcu").val('');
+        let monthYearPicker = $("#month-year-picker").val();
+        // alert(inputDatePickerRekapDcu);
+        // $("#inputDatePickerRekapDcu").val(inputDatePickerRekapDcu);
+
+        // alert($("#month-year-picker").val());
+
+        
+        // $("#formMonthYear").submit();
+
+        // coba sendiri
+        $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+                // 
+                // Send data to Laravel using AJAX
+            jQuery.ajax({
+                url: '{{ route('dcuRecapMontYear') }}',
+                type: 'POST',
+                data: { // Add CSRF token
+                    monthYear: monthYearPicker,
+                },
+                success: function(response) {
+                    // console.log('Data sent successfully:', response);
+                    // formDCU.submit();
+                    // location.reload();
+                    let dataTableRekapDcu = $('#dataTableRekapDcu');
+
+                    dataTableRekapDcu.empty(); // Clear previous data
+
+                    dataTableRekapDcu.append(response);
+                    // if (response.length > 0) {
+                    //     response.forEach(function(item) {
+                    //         dataContainer.append('<p>' + item.status_dcu + ' - ' + item.tanggal + '</p>');
+                    //     });
+                    // } else {
+                    //     dataContainer.append('<p>No data found for the given month and year.</p>');
+                    // }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error sending data:', error);
+                }
+            });
+    });
+</script>
 
 {{-- script untuk handle export table html to pdf --}}
 <script>
-  document.getElementById('btnExportPdf').addEventListener('click', function () {
-      // Load the required functions from jsPDF
-      const { jsPDF } = window.jspdf;
+  document.getElementById('btnExportExcel').addEventListener('click', function () {
+        // Get the table
+        let table = document.getElementById('myTable');
 
-      // Create a new jsPDF instance
-      const doc = new jsPDF();
+        // Convert table to a worksheet
+        let worksheet = XLSX.utils.table_to_sheet(table);
 
-      // Add autoTable plugin to the jsPDF instance
-      doc.autoTable({ html: '#myTable' });
+        // Create a new workbook
+        let workbook = XLSX.utils.book_new();
 
-      // Save the generated PDF
-      doc.save('table.pdf');
+        // Append the worksheet to the workbook
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+        // Generate Excel file and trigger a download
+        XLSX.writeFile(workbook, 'table.xlsx');
+
   });
 </script>
 
@@ -236,6 +350,6 @@
     });
 
     // default val of input date month-year
-    $('#month-year-picker').val('June 2024');
+    // $('#month-year-picker').val('June 2024');
 </script>
 @endsection

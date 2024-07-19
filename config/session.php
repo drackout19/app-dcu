@@ -18,7 +18,8 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'file'),
+    // 'driver' => env('SESSION_DRIVER', 'file'),
+    'driver' => env('SESSION_DRIVER', 'database'),
 
     /*
     |--------------------------------------------------------------------------
@@ -31,7 +32,8 @@ return [
     |
     */
 
-    'lifetime' => env('SESSION_LIFETIME', 120),
+    // 'lifetime' => env('SESSION_LIFETIME', 120), 
+    'lifetime' => env('SESSION_LIFETIME', 5256000), 
 
     'expire_on_close' => false,
 
@@ -72,7 +74,8 @@ return [
     |
     */
 
-    'connection' => env('SESSION_CONNECTION'),
+    // 'connection' => env('SESSION_CONNECTION'),
+    'connection' => env('SESSION_CONNECTION', null),
 
     /*
     |--------------------------------------------------------------------------
@@ -100,7 +103,8 @@ return [
     |
     */
 
-    'store' => env('SESSION_STORE'),
+    // 'store' => env('SESSION_STORE'),
+    'store' => env('SESSION_STORE', null),
 
     /*
     |--------------------------------------------------------------------------
@@ -155,7 +159,8 @@ return [
     |
     */
 
-    'domain' => env('SESSION_DOMAIN'),
+    // 'domain' => env('SESSION_DOMAIN'),
+    'domain' => env('SESSION_DOMAIN', null),
 
     /*
     |--------------------------------------------------------------------------

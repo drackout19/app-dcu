@@ -13,14 +13,22 @@ return new class extends Migration
     {
         Schema::create('manpowers', function (Blueprint $table) {
             $table->id();
+            // $table->foreignId('salary_id');
             $table->string('jabatan');
             $table->string('nama_pekerja');
             $table->date('tanggal_lahir');
             $table->text('alamat');
             $table->string('no_KTP')->nullable();
             $table->string('foto_KTP')->nullable();
+            $table->string('foto_diri')->nullable();
+            $table->string('jenis_kelamin')->nullable();
+            $table->string('umur')->nullable();
+            // $table->string('no_rekening')->nullable();
+            // $table->string('nama_bank')->nullable();
+            $table->string('status_pekerja')->nullable();
             $table->string('mcu')->nullable();
             $table->string('kartu_induction')->nullable();
+            $table->string('no_kartu_badge')->nullable();
             $table->string('kartu_badge')->nullable();
             $table->string('keterangan')->nullable();
             $table->string('lokasi_kerja')->nullable();

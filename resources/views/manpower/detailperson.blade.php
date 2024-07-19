@@ -8,7 +8,16 @@
         <div>
             {{-- foto diri personal --}}
             <div class="mb-5" style="display: flex; align-items: center;">
-                <img src="https://picsum.photos/id/237/200/250" alt="foto diri {{ $data->nama_pekerja }}">
+                {{-- <img src="https://picsum.photos/id/237/200/250" alt="foto diri {{ $data->nama_pekerja }}"> --}}
+                @if($data->foto_diri != null)
+                    <img style="width: 200px; height: 250px" src="{{ asset('storage/manpowers/fotodiri/'.$data->foto_diri) }}" alt="foto diri {{ $data->nama_pekerja }}">
+                @else
+                    @if($data->jenis_kelamin == 'Pria')
+                        <img class="border rounded" style="width: 200px; height: 250px" src="{{ asset('storage/manpowers/fotodiri/default/profile_empty_man.png') }}" alt="foto diri">
+                    @else
+                        <img class="border rounded" style="width: 200px; heig ht: 250px" src="{{ asset('storage/manpowers/fotodiri/default/profile_empty_woman.png') }}" alt="foto diri">
+                    @endif
+                @endif
                 {{--  --}}
                 <p class="fs-1" style="margin-left: 20%">Personal Profile</p>
             </div>
@@ -18,84 +27,128 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-4">
                         <h5 class="mb-4">1. Jabatan</h5>
                         <h5 class="mb-4">2. Nama</h5>
-                        <h5 class="mb-4">3. Tanggal Lahir</h5>
-                        <h5 class="mb-4">4. Alamat</h5>
-                        <h5 class="mb-4">5. No KTP</h5>
-                        <h5 class="mb-4">5. Lokasi Kerja</h5>
-                        <h5 class="mb-4">5. Keterangan</h5>
+                        <h5 class="mb-4">3. Jenis Kelamin</h5>
+                        <h5 class="mb-4">4. Tanggal Lahir</h5>
+                        <h5 class="mb-4">5. Alamat</h5>
+                        <h5 class="mb-4">6. No KTP</h5>
+                        <h5 class="mb-4">7. No Rekening</h5>
+                        <h5 class="mb-4">8. Lokasi Kerja</h5>
+                        <h5 class="mb-4">9. Keterangan</h5>
                     </div>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-8">
                         <h5 class="mb-4" style="font-weight: 400">: {{ $data->jabatan }}</h5>
                         <h5 class="mb-4" style="font-weight: 400">: {{ $data->nama_pekerja }}</h5>
+                        <h5 class="mb-4" style="font-weight: 400">: {{ $data->jenis_kelamin }}</h5>
                         <h5 class="mb-4" style="font-weight: 400">: {{ $data->tanggal_lahir }}</h5>
                         <h5 class="mb-4" style="font-weight: 400">: {{ $data->alamat }}</h5>
-                        <h5 class="mb-4" style="font-weight: 400">: {{ $data->no_KTP }}</h5>
-                        <h5 class="mb-4" style="font-weight: 400">: {{ $data->lokasi_kerja }}</h5>
-                        <h5 class="mb-4" style="font-weight: 400">: {{ $data->keterangan }}</h5>
+                        <h5 class="mb-4" style="font-weight: 400">: {{ ($data->no_KTP != null) ? $data->no_KTP : '-' }}</h5>
+                        <h5 class="mb-4" style="font-weight: 400">: {{ ($data->no_rekening != null) ? $data->no_rekening.' ('. $data->nama_bank.')' : '-' }}</h5>
+                        <h5 class="mb-4" style="font-weight: 400">: {{ ($data->lokasi_kerja != null) ? $data->lokasi_kerja : '-' }}</h5>
+                        <h5 class="mb-4" style="font-weight: 400">: {{ ($data->keterangan != null) ? $data->keterangan : '-' }}</h5>
                         {{-- <div class="border" style="max-width: 50%;">
                             <img src="{{ asset('storage/manpowers/fotoktp/'.$data->foto_KTP) }}" alt="foto ktp" style="width: 100%; height: 100%;">
                         </div> --}}
                     </div>
                 </div>
                 <div class="mb-4">
-                    <h5>6. Foto KTP</h5>
-                    <div class="border mx-auto" style="max-width: 50%;">
-                        <img src="{{ asset('storage/manpowers/fotoktp/'.$data->foto_KTP) }}" alt="foto ktp" style="width: 100%; height: 100%;">
-                    </div>
+                    <h5>10. Foto KTP</h5>
+                    @if ($data->foto_KTP !== null)
+                        <div class="border mx-auto" style="max-width: 50%;">
+                            <img src="{{ asset('storage/manpowers/fotoktp/'.$data->foto_KTP) }}" alt="foto ktp" style="width: 100%; height: 100%;">
+                        </div>
+                    @else
+                        <p class="text-warning text-center"><i>Belum ada KTP yg diupload!</i></p>
+                    @endif
                 </div>
                 <div class="mb-4">
-                    <h5>7. MCU</h5>
-                    <div class="mx-auto" style="width: max-content">
-                        <embed src="{{ asset('storage/manpowers/suratmcu/'.$data->mcu) }}" width="500" height="600"  type="application/pdf">
-                    </div>
+                    <h5>11. MCU</h5>
+                    @if ($data->mcu !== null)
+                        <div class="mx-auto" style="width: max-content">
+                            <embed src="{{ asset('storage/manpowers/suratmcu/'.$data->mcu) }}" width="500" height="600"  type="application/pdf">
+                        </div>
+                    @else
+                        <p class="text-warning text-center"><i>Belum ada MCU yg diupload!</i></p>
+                    @endif
                 </div>
                 <div class="mb-4">
-                    <h5>8. Kartu Induction</h5>
-                    <div class="mx-auto" style="max-width: 30%">
-                        <img src="{{ asset('storage/manpowers/foto_kartu_induction/'.$data->kartu_induction) }}" alt="kartu induction" style="width: 100%">
-                    </div>
+                    <h5>12. Kartu Induction</h5>
+                    @if ($data->kartu_induction !== null)
+                        <div class="mx-auto" style="max-width: 30%">
+                            <img src="{{ asset('storage/manpowers/foto_kartu_induction/'.$data->kartu_induction) }}" alt="kartu induction" style="width: 100%">
+                        </div>
+                    @else
+                        <p class="text-warning text-center"><i>Belum ada Kartu Induction yg diupload!</i></p>
+                    @endif
                 </div>
                 <div class="mb-4">
-                    <h5>9. Kartu Badge</h5>
-                    <div class="mx-auto" style="max-width: 40%">
-                        <img src="{{ asset('storage/manpowers/foto_kartu_badge/'.$data->kartu_badge) }}" alt="kartu badge" style="width: 100%">
-                    </div>
+                    <h5>13. Kartu Badge</h5>
+                    @if ($data->kartu_badge !== null)
+                        <div class="mx-auto" style="max-width: 40%">
+                            <img src="{{ asset('storage/manpowers/foto_kartu_badge/'.$data->kartu_badge) }}" alt="kartu badge" style="width: 100%">
+                        </div>
+                    @else
+                        <p class="text-warning text-center"><i>Belum ada Kartu Badge yg diupload!</i></p>
+                    @endif
                 </div>
                 <div class="mb-4">
-                    <h5>10. SKCK</h5>
-                    <div class="mx-auto" style="width: max-content">
-                        <embed src="{{ asset('storage/manpowers/suratskck/'.$data->skck) }}" width="500" height="600"  type="application/pdf">
-                    </div>
+                    <h5>14. SKCK</h5>
+                    @if ($data->skck !== null)
+                        <div class="mx-auto" style="width: max-content">
+                            <embed src="{{ asset('storage/manpowers/suratskck/'.$data->skck) }}" width="500" height="600"  type="application/pdf">
+                        </div>
+                    @else
+                        <p class="text-warning text-center"><i>Belum ada SKCK yg diupload!</i></p>
+                    @endif
                 </div>
                 <div class="mb-4">
-                    <h5>11. Kartu NPWP</h5>
-                    <div class="mx-auto" style="max-width: 40%">
-                        <img src="{{ asset('storage/manpowers/kartunpwp/'.$data->npwp) }}" alt="kartu npwp" style="width: 100%">
-                    </div>
+                    <h5>15. Kartu NPWP</h5>
+                    @if ($data->npwp !== null)
+                        <div class="mx-auto" style="max-width: 40%">
+                            <img src="{{ asset('storage/manpowers/kartunpwp/'.$data->npwp) }}" alt="kartu npwp" style="width: 100%">
+                        </div>
+                    @else
+                        <p class="text-warning text-center"><i>Belum ada NPWP yg diupload!</i></p>
+                    @endif
                 </div>
                 <div class="mb-4">
-                    <h5>12. CV</h5>
-                    <div class="mx-auto" style="width: max-content">
-                        <embed src="{{ asset('storage/manpowers/cv/'.$data->cv) }}" width="500" height="600"  type="application/pdf">
-                    </div>
+                    <h5>16. CV</h5>
+                    @if ($data->cv !== null)
+                        <div class="mx-auto" style="width: max-content">
+                            <embed src="{{ asset('storage/manpowers/cv/'.$data->cv) }}" width="500" height="600"  type="application/pdf">
+                        </div>
+                    @else
+                        <p class="text-warning text-center"><i>Belum ada CV yg diupload!</i></p>
+                    @endif
                 </div>
                 <div class="mb-4">
-                    <h5>13. Sertifikat</h5>
-                    <div class="mx-auto" style="width: max-content">
-                        <embed src="{{ asset('storage/manpowers/sertifikat/'.$data->sertifikat) }}" width="500" height="600"  type="application/pdf">
-                    </div>
+                    <h5>17. Sertifikat</h5>
+                    @if ($data->sertifikat !== null)
+                        <div class="mx-auto" style="width: max-content">
+                            <embed src="{{ asset('storage/manpowers/sertifikat/'.$data->sertifikat) }}" width="500" height="600"  type="application/pdf">
+                        </div>
+                    @else
+                        <p class="text-warning text-center"><i>Belum ada Sertifikat yg diupload!</i></p>
+                    @endif
                 </div>
                 <div class="mb-4">
-                    <h5>14. Paklaring</h5>
-                    <div class="mx-auto" style="width: max-content">
-                        <embed src="{{ asset('storage/manpowers/paklaring/'.$data->paklaring) }}" width="500" height="600"  type="application/pdf">
-                    </div>
+                    <h5>18. Paklaring</h5>
+                    @if ($data->paklaring !== null)
+                        <div class="mx-auto" style="width: max-content">
+                            <embed src="{{ asset('storage/manpowers/paklaring/'.$data->paklaring) }}" width="500" height="600"  type="application/pdf">
+                        </div>
+                    @else
+                        <p class="text-warning text-center"><i>Belum ada Paklaring yg diupload!</i></p>
+                    @endif
                 </div>
                 <div class="mb-4">
-                    <h5>15. Surat Vaksin</h5>
-                    <div class="mx-auto" style="width: max-content">
-                        <embed src="{{ asset('storage/manpowers/suratvaksin/'.$data->surat_vaksin) }}" width="500" height="600"  type="application/pdf">
-                    </div>
+                    <h5>19. Surat Vaksin</h5>
+                    @if ($data->surat_vaksin !== null)
+                        <div class="mx-auto" style="width: max-content">
+                            <embed src="{{ asset('storage/manpowers/suratvaksin/'.$data->surat_vaksin) }}" width="500" height="600"  type="application/pdf">
+                        </div>
+                    @else
+                        <p class="text-warning text-center"><i>Belum ada Surat Vaksin yg diupload!</i></p>
+                    @endif
                 </div>
             </div>
         </div>
