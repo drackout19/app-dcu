@@ -115,27 +115,8 @@
         </form>
       </div>
       
-      <div class="bg-primary rounded p-1 text-white" style="width: max-content">
-        <span class="mb-" style="display: flex"><span class="material-symbols-outlined">sort</span>Sort By</span>
       
-        {{-- <button class="btn btn-sm btn-success" id="btnExportExcelOnlyMoon" style="display: flex; align-items: center"> --}}
-            {{-- <span class="me-1">Export All Table to .xlxs only in</span> 
-            
-        </button> --}}
-        
-        <div class="p-1" style="display: flex;">
-            <label for="month-year-picker"> Bulan & Tahun:</label>
-            <form class="ms-1 p-0" id="formMonthYear" method="post">
-            @csrf
-                <div class="p-0" style="background: white; display: flex; align-items: center">
-                    <input type="text" id="month-year-picker" name="month-year-picker" style="border: none; width: 110px;" placeholder="Pilih">
-                    <label class="text-black p-0" for="month-year-picker"><span class="material-symbols-outlined">
-                    keyboard_arrow_down
-                    </span></label>
-                </div>
-            </form>
-        </div>
-      </div>
+      
       <hr>
       <div style="width: 100%; display: flex;">
             <div class="btn btn-sm btn-success mt-2 ms-auto d-flex" id="btnExportExcel"><span class="material-symbols-outlined me-1">export_notes</span>Export Table to .xlsx</div>

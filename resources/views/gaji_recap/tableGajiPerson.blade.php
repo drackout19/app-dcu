@@ -17,14 +17,14 @@
 </head>
 <body>
      
-    <table class="table-bordered mx-auto mt-3 text-center" id="myTable" style="background: #f0f0f0">
+    <table class="table-bordered mt-3 text-center" id="myTable" style="background: #f0f0f0">
         
         <thead> 
             <th>No</th> 
             <th>Id Badge</th> 
             <th>Jabatan</th> 
             <th>Nama</th> 
-            <th>Jenis Kelamin</th> 
+            <th>Status Pekerja</th> 
             <th>Gaji Pokok</th> 
             <th>Upah Harian</th> 
             <th>Upah Lembur Perjam</th>
@@ -35,10 +35,10 @@
                 <td>{{ $dataSalary->manpower->nama_kartu_badge }}</td>
                 <td>{{ $dataSalary->manpower->jabatan }}</td>
                 <td>{{ $dataSalary->manpower->nama_pekerja }}</td>
-                <td>{{ $dataSalary->manpower->jenis_kelamin }}</td>
-                <td>{{ $dataSalary->gaji_pokok }}</td>
-                <td>{{ $dataSalary->gaji_harian }}</td>
-                <td>{{ $dataSalary->gaji_lembur }}</td>
+                <td>{{ $dataSalary->manpower->status_pekerja }}</td>
+                <td>{{ ($dataSalary->gaji_pokok != null) ? number_format($dataSalary->gaji_pokok, 0, ',', '.') : '-' }}</td>
+                <td>{{ ($dataSalary->gaji_harian != null) ? number_format($dataSalary->gaji_harian, 0, ',', '.') : '-' }}</td>
+                <td>{{ ($dataSalary->gaji_lembur != null) ? number_format($dataSalary->gaji_lembur, 0, ',', '.') : '-' }}</td>
             </tr>
         </tbody>
 

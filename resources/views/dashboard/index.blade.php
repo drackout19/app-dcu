@@ -1616,11 +1616,10 @@
         let ubahJamPulang = $(`#ubahJamPulang${id}`).val();
         $(`#inputUbahJamPulang${id}`).val(`${ubahJamPulang}:00`);
     }
-    
 </script>
 
 
-{{-- script untuk handle sticky note jangan utak atik ga ngerti jga gw --}}
+// {{-- script untuk handle sticky note jangan utak atik ga ngerti jga gw --}}
 <script>
     $(document).ready(function () {
         all_notes = $("#sticky-note li a");

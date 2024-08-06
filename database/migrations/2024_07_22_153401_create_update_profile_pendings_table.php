@@ -1,0 +1,53 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('update_profile_pendings', function (Blueprint $table) {
+            $table->id();
+            $table->boolean('status_konfirmasi')->default(false);
+            $table->foreignId('manpower_id');
+            $table->string('jabatan');
+            $table->string('nama_pekerja');
+            $table->date('tanggal_lahir');
+            $table->text('alamat');
+            $table->string('no_KTP')->nullable();
+            $table->string('foto_KTP')->nullable();
+            $table->string('foto_diri')->nullable();
+            $table->string('jenis_kelamin')->nullable();
+            $table->string('umur')->nullable();
+            // $table->string('no_rekening')->nullable();
+            // $table->string('nama_bank')->nullable();
+            // $table->string('status_pekerja')->nullable();
+            $table->string('mcu')->nullable();
+            $table->string('kartu_induction')->nullable();
+            $table->string('no_kartu_badge')->nullable();
+            $table->string('kartu_badge')->nullable();
+            $table->string('keterangan')->nullable();
+            // $table->string('lokasi_kerja')->nullable();
+            $table->string('skck')->nullable();
+            $table->string('npwp')->nullable();
+            $table->string('cv')->nullable();
+            $table->string('sertifikat')->nullable();
+            $table->string('paklaring')->nullable();
+            $table->string('surat_vaksin')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('update_profile_pendings');
+    }
+};

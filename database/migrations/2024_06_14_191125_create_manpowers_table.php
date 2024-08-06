@@ -25,13 +25,13 @@ return new class extends Migration
             $table->string('umur')->nullable();
             // $table->string('no_rekening')->nullable();
             // $table->string('nama_bank')->nullable();
-            $table->string('status_pekerja')->nullable();
+            // $table->string('status_pekerja')->nullable();
             $table->string('mcu')->nullable();
             $table->string('kartu_induction')->nullable();
             $table->string('no_kartu_badge')->nullable();
             $table->string('kartu_badge')->nullable();
             $table->string('keterangan')->nullable();
-            $table->string('lokasi_kerja')->nullable();
+            // $table->string('lokasi_kerja')->nullable();
             $table->string('skck')->nullable();
             $table->string('npwp')->nullable();
             $table->string('cv')->nullable();

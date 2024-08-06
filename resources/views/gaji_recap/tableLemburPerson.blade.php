@@ -24,7 +24,7 @@
             <th rowspan="3">Id Badge</th> 
             <th rowspan="3">Jabatan</th> 
             <th rowspan="3">Nama</th> 
-            <th rowspan="3">Jenis Kelamin</th> 
+            <th rowspan="3">Status Pekerja</th> 
             <th colspan="31" >{{ $monthYear }}</th>
             {{-- <th colspan="31" >July 2024</th> --}}
             
@@ -58,7 +58,7 @@
                     <td>{{ $dataPerson->no_kartu_badge }}</td>
                     <td>{{ $dataPerson->jabatan }}</td>
                     <td>{{ $dataPerson->nama_pekerja }}</td>
-                    <td>{{ $dataPerson->jenis_kelamin }}</td>
+                    <td>{{ $dataPerson->status_pekerja }}</td>
                     @php
                         $isBreak = false;
                         for($day = 1; $day <= 31; $day++) {

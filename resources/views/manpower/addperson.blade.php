@@ -71,38 +71,37 @@
                     <input type="number" class="form-control" id="inputUmur" name="inputUmur">
                 </div>
                 {{-- input status karyawan --}}
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label class="" for="inputStatusPekerja" class="form-label">
                         <h6 class="mb-0">Status Pekerja</h6>
                     </label>
-                    {{-- dropdown status karyawan --}}
                     <select class="form-select mt-2 mb-2" aria-label="Default select example" id="inputStatusPekerja" required
                         name="inputStatusPekerja">
                         <option hidden value="">Pilih Status Pekerja</option>
                         <option value="Tetap">Tetap</option>
                         <option value="Lepas">Lepas</option>
                     </select>
-                </div>
+                </div> --}}
                 {{-- input gaji pokok --}}
-                <div class="mb-3" id="divGajiPokok" style="display: none">
+                {{-- <div class="mb-3" id="divGajiPokok" style="display: none">
                     <label for="inputGajiPokok" class="form-label">
                         <h6 class="mb-0">Gaji Pokok</h6>
                     </label>
                     <input type="number" class="form-control" id="inputGajiPokok" name="inputGajiPokok">
-                </div>
+                </div> --}}
                 {{-- input gaji harian --}}
-                <div class="mb-3"  id="divGajiHarian" style="display: none">
+                <div class="mb-3"  id="divGajiHarian">
                     <label for="inputGajiHarian" class="form-label">
-                        <h6 class="mb-0">Gaji Harian</h6>
+                        <h6 class="mb-0">Upah Harian</h6>
                     </label>
-                    <input type="number" class="form-control" id="inputGajiHarian" name="inputGajiHarian">
+                    <input type="number" class="form-control" id="inputGajiHarian" name="inputGajiHarian" required>
                 </div>
                 {{-- input gaji lembur --}}
-                <div class="mb-3"  id="divGajiLembur" style="display: none">
+                <div class="mb-3"  id="divGajiLembur">
                     <label for="inputGajiLembur" class="form-label">
-                        <h6 class="mb-0">Gaji Lembur</h6>
+                        <h6 class="mb-0">Upah Lembur</h6>
                     </label>
-                    <input type="number" class="form-control" id="inputGajiLembur" name="inputGajiLembur">
+                    <input type="number" class="form-control" id="inputGajiLembur" name="inputGajiLembur" required>
                 </div>
                 {{-- input no rekening bank --}}
                 <div class="mb-3">
@@ -157,14 +156,14 @@
                     <label for="inputNoBadge" class="form-label">
                         <h6 class="mb-0">No Kartu Badge</h6>
                     </label>
-                    <input type="number" class="form-control" id="inputNoBadge" name="inputNoBadge">
+                    <input type="number" class="form-control" id="inputNoBadge" name="inputNoBadge" required>
                 </div>
                 {{-- input kartu badge --}}
                 <div class="mb-3">
                     <label for="inputKartuBadge" class="form-label">
                         <h6 class="mb-0">Kartu Badge</h6>
                     </label>
-                    <input type="file" class="form-control" id="inputKartuBadge" name="inputKartuBadge">
+                    <input type="file" class="form-control" id="inputKartuBadge" name="inputKartuBadge" required>
                 </div>
                 {{-- input file skck --}}
                 <div class="mb-3">
@@ -209,7 +208,7 @@
                     <input type="file" class="form-control" id="inputFileSuratVaksin" name="inputFileSuratVaksin">
                 </div>
                 {{-- input lokasi kerja --}}
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label for="">
                         <h6 class="mb-0">Lokasi Kerja</h6>
                     </label>
@@ -218,7 +217,7 @@
                         <option value="RU VI Balongan">RU VI Balongan</option>
                         <option value="RU VI Balikpapan">RU V Balikpapan</option>
                     </select>
-                </div>
+                </div> --}}
                 {{-- input keterangan --}}
                 <div class="mb-3">
                     <label for="inputKeterangan" class="form-label">
@@ -259,25 +258,25 @@
             $("#inputNoRekening").attr("required", true);
         });
 
-        $("#inputStatusPekerja").change(function() {
-            let inputStatusPekerja = $("#inputStatusPekerja").val();
+        // $("#inputStatusPekerja").change(function() {
+        //     let inputStatusPekerja = $("#inputStatusPekerja").val();
 
-            if(inputStatusPekerja == "Tetap") {
-                $("#divGajiPokok").show();
-                $("#divGajiPokok").attr('required', true);
-                $("#divGajiHarian").hide();
-                $("#divGajiHarian").removeAttr('required');
-                $("#divGajiLembur").hide();
-                $("#divGajiLembur").removeAttr('required');
-            } else {
-                $("#divGajiPokok").hide();
-                $("#divGajiPokok").removeAttr('required');
-                $("#divGajiHarian").show();
-                $("#divGajiHarian").attr('required', true);
-                $("#divGajiLembur").show();
-                $("#divGajiLembur").attr('required', true);;
-            }
-        });
+        //     if(inputStatusPekerja == "Tetap") {
+        //         $("#divGajiPokok").show();
+        //         $("#divGajiPokok").attr('required', true);
+        //         $("#divGajiHarian").hide();
+        //         $("#divGajiHarian").removeAttr('required');
+        //         $("#divGajiLembur").hide();
+        //         $("#divGajiLembur").removeAttr('required');
+        //     } else {
+        //         $("#divGajiPokok").hide();
+        //         $("#divGajiPokok").removeAttr('required');
+        //         $("#divGajiHarian").show();
+        //         $("#divGajiHarian").attr('required', true);
+        //         $("#divGajiLembur").show();
+        //         $("#divGajiLembur").attr('required', true);;
+        //     }
+        // });
         
     </script>
 @endsection

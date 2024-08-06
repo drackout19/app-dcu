@@ -34,12 +34,12 @@
                 <th class="text-center">Foto Diri</th>
                 <th class="text-center">Jenis Kelamin</th>
                 <th class="text-center">Umur</th>
-                <th class="text-center">Status Pekerja</th>
+                {{-- <th class="text-center">Status Pekerja</th> --}}
                 <th class="text-center">MCU</th>
                 <th class="text-center">Kartu Induction</th>
                 <th class="text-center">Kartu Badge</th>
                 <th class="text-center">Keterangan</th>
-                <th class="text-center">Lokasi Kerja</th>
+                {{-- <th class="text-center">Lokasi Kerja</th> --}}
                 <th class="text-center">SKCK</th>
                 <th class="text-center">NPWP</th>
                 <th class="text-center">CV</th>
@@ -101,14 +101,13 @@
                 {{-- umur --}}
                 <td class="text-center">{{ $data->umur }} tahun</td>
                 {{-- status karyawan --}}
-                <td class="text-center">
+                {{-- <td class="text-center">
                   @if($data->status_pekerja != null)
                     <span class="fw-bolder">{{ $data->status_pekerja }}</span><br>
-                    {{-- {{ $data->no_rekening }} --}}
                   @else
                     -
                   @endif
-                </td>
+                </td> --}}
 
                 <td>
                   @if ($data->mcu !== null)
@@ -177,7 +176,7 @@
                   @endif
                 </td>
                 <td class="text-center">{{ ($data->keterangan == null) ? '-' : $data->keterangan }}</td>
-                <td class="text-center">{{ ($data->lokasi_kerja == null) ? '-' : $data->lokasi_kerja }}</td>
+                {{-- <td class="text-center">{{ ($data->lokasi_kerja == null) ? '-' : $data->lokasi_kerja }}</td> --}}
                 <td class="text-center">
                   @if ($data->skck !== null)
                     Ada
@@ -326,172 +325,6 @@
                   Data Manpower belum Tersedia.
               </div>
           @endforelse
-            <tr>
-                <td class="text-center">1</td>
-                <td class="text-start">Supervisor</td>
-                <td class="text-center">Micu Turismo</td>
-                <td class="text-center">19-06-2022</td>
-                <td class="text-start">Indramayu, singaraja</td>
-                <td class="text-start">32102020200</td>
-                <td class="text-center" >
-                  <img src="{{URL::asset('/manpower/foto_ktp/ktp_micu.jpg')}}" alt="ktp micu" style="max-width: 100px">
-                  <span class="text-primary fw-bolder" style="cursor: default" id="click_lihat_foto_ktp" >Lihat</span>
-                  {{-- float image when click --}}
-                  <div id="float_foto_ktp" style="display: none">
-                    <div style="background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;">
-                      <div style=" position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%); width: 300px">
-                        <img src="{{URL::asset('/manpower/foto_ktp/ktp_micu.jpg')}}" alt="Foto KTP" style="max-width: 100%; scale: 2">
-                        <span class="material-symbols-outlined fw-bold" style="position: absolute; right: -180px; top: -130px; font-size: 50px; cursor: default" onclick="click_close_floating_documents()">
-                          cancel
-                          </span>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <img class="border rounded-circle" src="/manpower/foto_diri/person_compresor.png" alt="foto-diri" style="width: 100px; height: 100px">
-                </td>
-                <td class="text-center">Pria</td>
-                {{-- <td class="text-center">
-                  <span class="fw-bolder">BCA</span>
-                  8765234567
-                </td> --}}
-                <td class="text-center">19 tahun</td>
-                <td class="text-center">Tetap</td>
-                <td>
-                  Sudah <span class="text-primary fw-bolder" style="cursor: default" id="click_lihat_surat_mcu">Lihat
-                   
-                    <div id="float_surat_mcu" style="display: none">
-                      <div style="background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;" >
-                        <div style=" position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
-                          <embed src="manpower/surat_mcu/dami-surat-hasil-mcu.pdf" width="500" height="600"  type="application/pdf">
-                            <span class="material-symbols-outlined fw-bold" style="position: absolute; right: -25px; top: -30px; font-size: 50px; cursor: default;" onclick="click_close_floating_documents()">
-                              cancel
-                              </span>
-                        </div>
-                      </div>
-                    </div>
-                </td>
-                <td class="text-center">
-                  <img src="{{URL::asset('/manpower/foto_kartu_induction/kartu-induction-dami1.png')}}" alt="ktp micu" style="max-width: 80px"> 
-                  <span class="text-primary fw-bolder" style="cursor: default" id="click_lihat_kartu_induction">Lihat</span> 
-                  {{-- float kartu induction --}}
-                  <div id="float_kartu_induction" style="display: none">
-                    <div style="background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;" >
-                      <div style=" position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
-                        <img src="{{URL::asset('/manpower/foto_kartu_induction/kartu-induction-dami1.png')}}" alt="kartu induction" style="max-width: 100%; scale: 1.5">
-                        <span class="material-symbols-outlined fw-bold" style="position: absolute; right: -80px; top: -110px; font-size: 50px; cursor: default" onclick="click_close_floating_documents()">
-                          cancel
-                          </span>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td class="text-center">
-                  <input style="border: none ; background: transparent; font-weight: 700; max-width: 100px" id="no_kartu_badge" type="text" value="12935" disabled>
-                  <img src="{{URL::asset('/manpower/foto_kartu_badge/kartu-badge-dami1.png')}}" alt="ktp micu" style="max-width: 100px"> 
-                  <span class="text-primary fw-bolder" style="cursor: default" id="click_lihat_kartu_badge">Lihat</span> 
-
-                  {{-- float kartu induction --}}
-                  <div id="float_kartu_badge" style="display: none">
-                    <div style="background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;" >
-                      <div style=" position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
-                        <img src="{{URL::asset('/manpower/foto_kartu_badge/kartu-badge-dami1.png')}}" alt="kartu badge" style="max-width: 100%; scale: 1.5">
-                        <span class="material-symbols-outlined fw-bold" style="position: absolute; right: -100px; top: -80px; font-size: 50px; cursor: default" onclick="click_close_floating_documents()">
-                          cancel
-                          </span>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td class="text-center"></td>
-                <td class="text-center">RU VI Balongan</td>
-                <td class="text-center">
-                  Ada <span class="text-primary fw-bolder" style="cursor: default" id="click_lihat_surat_skck">Lihat
-                   
-                    <div id="float_surat_skck" style="display: none">
-                      <div style="background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;" >
-                        <div style=" position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
-                          <embed src="manpower/surat_skck/skck-dami1.pdf" width="500" height="600"  type="application/pdf">
-                            <span class="material-symbols-outlined fw-bold" style="position: absolute; right: -25px; top: -30px; font-size: 50px; cursor: default;" onclick="click_close_floating_documents()">
-                              cancel
-                              </span>
-                        </div>
-                      </div>
-                    </div>
-                </td>
-                <td class="text-center">
-                  Ada <span class="text-primary fw-bolder" style="cursor: default" id="click_lihat_kartu_npwp">Lihat
-                   
-                    <div id="float_kartu_npwp" style="display: none">
-                      <div style="background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;" >
-                        <div style=" position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
-                          <embed src="manpower/kartu_npwp/npwp-dami1.pdf" width="500" height="600"  type="application/pdf">
-                            <span class="material-symbols-outlined fw-bold" style="position: absolute; right: -25px; top: -30px; font-size: 50px; cursor: default;" onclick="click_close_floating_documents()">
-                              cancel
-                              </span>
-                        </div>
-                      </div>
-                    </div>  
-                </td>   
-                <td class="text-center">
-                  Ada <span class="text-primary fw-bolder" style="cursor: default" id="click_lihat_cv">Lihat</span>
-                   
-                    <div id="float_cv" style="display: none">
-                      <div style="background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;" >
-                        <div style=" position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
-                          <embed src="manpower/cv/cv-dami1.pdf" width="500" height="600"  type="application/pdf">
-                            <span class="material-symbols-outlined fw-bold" style="position: absolute; right: -25px; top: -30px; font-size: 50px; cursor: default;" onclick="click_close_floating_documents()">
-                              cancel
-                              </span>
-                        </div>
-                      </div>
-                    </div>  
-                </td>   
-                <td class="text-center">
-                  Ada <br><span class="text-primary fw-bolder" style="cursor: default" id="click_lihat_sertifikat">Lihat</span>
-                   
-                    <div id="float_sertifikat" style="display: none">
-                      <div style="background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;" >
-                        <div style=" position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
-                          <embed src="manpower/sertifikat/sertifikat-welder-dami1.pdf" width="500" height="600"  type="application/pdf">
-                            <span class="material-symbols-outlined fw-bold" style="position: absolute; right: -25px; top: -30px; font-size: 50px; cursor: default;" onclick="click_close_floating_documents()">
-                              cancel
-                              </span>
-                        </div>
-                      </div>
-                    </div>  
-                </td>   
-                <td class="text-center">
-                  Ada <br><span class="text-primary fw-bolder" style="cursor: default" id="click_lihat_paklaring">Lihat
-                   
-                    <div id="float_paklaring" style="display: none">
-                      <div style="background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;" >
-                        <div style=" position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
-                          <embed src="manpower/paklaring/paklaring-dami1.pdf" width="500" height="600"  type="application/pdf">
-                            <span class="material-symbols-outlined fw-bold" style="position: absolute; right: -25px; top: -30px; font-size: 50px; cursor: default;" onclick="click_close_floating_documents()">
-                              cancel
-                              </span>
-                        </div>
-                      </div>
-                    </div>  
-                </td>
-                <td class="text-center">
-                  Ada <br><span class="text-primary fw-bolder" style="cursor: default" id="click_lihat_surat_vaksin">Lihat
-                   
-                    <div id="float_surat_vaksin" style="display: none">
-                      <div style="background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;" >
-                        <div style=" position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
-                          <embed src="manpower/surat_vaksin/surat-vaksin-dami1.pdf" width="500" height="600"  type="application/pdf">
-                            <span class="material-symbols-outlined fw-bold" style="position: absolute; right: -25px; top: -30px; font-size: 50px; cursor: default;" onclick="click_close_floating_documents()">
-                              cancel
-                              </span>
-                        </div>
-                      </div>
-                    </div> 
-                </td>
-                <td class="text-center" style="cursor: default"><span class="text-danger fw-bolder" >Hapus</span> | <span class="text-warning fw-bolder">Edit </span> | <span class="text-primary fw-bolder">Detail</span></td>
-            </tr>
         </tbody>
     </table>
 
